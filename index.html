@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patricio &amp; Maite · 10 de Octubre 2026</title>
+<meta name="description" content="Nos casamos el sábado 10 de octubre de 2026. Nos encantaría celebrar este día tan especial junto a ti.">
+<meta property="og:title" content="Patricio &amp; Maite · Nuestra Boda">
+<meta property="og:description" content="Sábado 10 de Octubre 2026 · 17:30 hrs · San Miguel de Tango">
+<meta property="og:image" content="img/hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --arena:#f6f1e9;
+    --arena-alt:#efe7db;
+    --tinta:#3d3226;
+    --tinta-suave:#6b5d4c;
+    --oro:#b08d52;
+    --oro-claro:#d8bd8b;
+    --blanco:#fffdfa;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--arena);
+    color:var(--tinta);
+    font-family:'Jost',system-ui,sans-serif;
+    font-weight:300;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .scroll{
+    height:100dvh;
+    overflow-y:scroll;
+    scroll-snap-type:y proximity;
+    scrollbar-width:none;
+  }
+  .scroll::-webkit-scrollbar{display:none}
+  section{
+    scroll-snap-align:start;
+    min-height:100dvh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:clamp(2rem,6vw,4rem) 1.5rem;
+    position:relative;
+  }
+
+  /* ---------- reveal ---------- */
+  .rv{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
+  .rv.on{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+
+  /* ---------- tipografía ---------- */
+  .nombres{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:300;
+    font-size:clamp(2.9rem,11vw,5.5rem);
+    line-height:1;
+    letter-spacing:.01em;
+  }
+  .nombres .amp{color:var(--oro);font-style:italic;display:block;font-size:.62em;margin:.12em 0}
+  .kicker{
+    font-size:clamp(.62rem,2.4vw,.78rem);
+    letter-spacing:.42em;
+    text-transform:uppercase;
+    color:var(--tinta-suave);
+  }
+  .titulo-sec{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.9rem,6vw,2.9rem);
+    font-weight:300;
+    letter-spacing:.02em;
+  }
+
+  /* ---------- filete decorativo ---------- */
+  .filete{display:flex;align-items:center;gap:.9rem;justify-content:center;width:100%;max-width:15rem;margin:1.4rem auto}
+  .filete::before,.filete::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--oro-claro))}
+  .filete::after{background:linear-gradient(90deg,var(--oro-claro),transparent)}
+  .filete span{color:var(--oro);font-size:.7rem}
+
+  /* ---------- 1. HERO ---------- */
+  #hero{justify-content:flex-start;gap:0;padding:0 1.25rem 2.6rem}
+  .foto-hero{
+    width:100%;
+    max-width:30rem;
+    aspect-ratio:4/5;
+    max-height:36dvh;
+    overflow:hidden;
+    position:relative;
+    border-radius:0 0 999px 999px;
+    box-shadow:0 18px 45px -22px rgba(61,50,38,.55);
+  }
+  .foto-hero img{width:100%;height:100%;object-fit:cover;object-position:center 62%}
+  .foto-hero::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(246,241,233,.35) 0%,transparent 28%,transparent 72%,rgba(246,241,233,.9) 100%);
+  }
+  .hero-txt{text-align:center;margin-top:-.6rem;position:relative;z-index:2;width:100%}
+  .invita{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--tinta-suave)}
+  .invitado{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:clamp(1.35rem,5vw,1.9rem);
+    color:var(--oro);
+    margin:.25rem 0 .3rem;
+    min-height:1.2em;
+  }
+  .mensaje{font-size:.68rem;line-height:1.85;letter-spacing:.12em;color:var(--tinta-suave);text-transform:uppercase;max-width:22rem;margin:0 auto}
+
+  .fecha{
+    margin:1.1rem auto 0;
+    display:flex;align-items:center;justify-content:center;
+    gap:clamp(.8rem,3.5vw,1.3rem);
+    width:max-content;
+  }
+  .fecha .lado{font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(--tinta-suave);white-space:nowrap}
+  .fecha .barra{width:1px;height:2.6rem;background:var(--oro-claro);flex:0 0 auto}
+  .fecha .centro .num{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,10vw,3.4rem);line-height:.92;font-weight:300}
+  .anio{margin-top:.28rem;font-size:.58rem;letter-spacing:.34em;color:var(--oro);text-transform:uppercase}
+
+  /* contador */
+  .contador{display:flex;gap:clamp(.8rem,4vw,1.6rem);justify-content:center;margin-top:1.2rem}
+  .contador div{min-width:2.7rem}
+  .contador b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.25rem,5vw,1.6rem);line-height:1.15}
+  .contador small{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)}
+
+  /* spotify compacto */
+  .musica{margin-top:1.25rem;width:100%;max-width:18.5rem}
+  .musica-btn{
+    width:100%;
+    display:flex;align-items:center;gap:.75rem;
+    background:var(--blanco);
+    border:1px solid rgba(176,141,82,.28);
+    border-radius:999px;
+    padding:.6rem .95rem;
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--tinta);
+    text-align:left;
+    transition:box-shadow .3s ease,transform .3s ease;
+  }
+  .musica-btn:hover{box-shadow:0 8px 22px -12px rgba(61,50,38,.5);transform:translateY(-1px)}
+  .musica-btn .ico{flex:0 0 auto;color:var(--oro)}
+  .musica-btn .tx{flex:1;min-width:0}
+  .musica-btn .tx b{display:block;font-weight:400;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .musica-btn .tx small{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-suave)}
+  .musica-btn .chev{transition:transform .3s ease;color:var(--tinta-suave)}
+  .musica[data-abierto="1"] .chev{transform:rotate(180deg)}
+  .musica-wrap{max-height:0;overflow:hidden;transition:max-height .45s ease,margin .45s ease}
+  .musica[data-abierto="1"] .musica-wrap{max-height:180px;margin-top:.6rem}
+
+  .flecha{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:var(--oro);animation:fl 2.4s ease-in-out infinite;opacity:.75}
+  @keyframes fl{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+  /* ---------- 2. INFO ---------- */
+  #info{background:var(--arena-alt)}
+  .tarjetas{display:flex;flex-direction:column;gap:1rem;width:100%;max-width:27rem;margin-top:2rem}
+  .tarjeta{
+    display:flex;align-items:center;gap:1.05rem;
+    background:var(--blanco);
+    border:1px solid rgba(176,141,82,.2);
+    border-radius:1.1rem;
+    padding:1.15rem 1.25rem;
+    text-decoration:none;color:inherit;
+    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
+  }
+  .tarjeta:hover{transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(61,50,38,.6);border-color:var(--oro-claro)}
+  .tarjeta .ico{
+    flex:0 0 auto;width:2.9rem;height:2.9rem;border-radius:50%;
+    background:linear-gradient(150deg,#f8f2e6,#eadfc9);
+    display:grid;place-items:center;color:var(--oro);
+  }
+  .tarjeta .cuerpo{flex:1;min-width:0}
+  .tarjeta h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.28rem;letter-spacing:.01em}
+  .tarjeta p{font-size:.76rem;line-height:1.55;color:var(--tinta-suave);margin-top:.15rem}
+  .tarjeta .go{flex:0 0 auto;color:var(--oro-claro);transition:transform .3s ease}
+  .tarjeta:hover .go{transform:translateX(3px);color:var(--oro)}
+
+  /* ---------- 3. OTROS ---------- */
+  #otros{background:var(--arena);gap:0}
+  .detalles{display:flex;flex-direction:column;gap:1.6rem;max-width:26rem;text-align:center;margin-top:1.8rem}
+  .detalle h3{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-bottom:.5rem}
+  .detalle p{font-size:.9rem;line-height:1.75;color:var(--tinta-suave)}
+  .detalle p strong{color:var(--tinta);font-weight:400}
+  .cierre{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:clamp(1.35rem,5vw,1.8rem);
+    line-height:1.5;
+    margin:2.2rem auto 1.6rem;
+    max-width:20rem;
+  }
+  .foto-final{
+    width:100%;max-width:22rem;aspect-ratio:3/4;max-height:38dvh;
+    overflow:hidden;border-radius:999px 999px 0 0;
+    box-shadow:0 -12px 40px -24px rgba(61,50,38,.6);
+  }
+  .foto-final img{width:100%;height:100%;object-fit:cover;object-position:center 45%}
+  .firma{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--oro);margin-top:1.4rem}
+  .pie{margin-top:.5rem;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);opacity:.7}
+</style>
+</head>
+<body>
+<main class="scroll" id="scroll">
+
+  <!-- ============ 1 · HERO ============ -->
+  <section id="hero">
+    <div class="foto-hero rv on">
+      <img src="img/hero.jpg" alt="Patricio y Maite" fetchpriority="high">
+    </div>
+
+    <div class="hero-txt">
+      <h1 class="nombres rv">Patricio<span class="amp">&amp;</span>Maite</h1>
+
+      <div class="filete rv" style="margin:.9rem auto"><span>&#10086;</span></div>
+
+      <p class="kicker rv">Te invitamos a nuestra boda</p>
+
+      <p class="invita rv" style="margin-top:1rem">Querid@</p>
+      <p class="invitado rv" id="invitado">&nbsp;</p>
+      <p class="mensaje rv">Nos encantaría celebrar<br>este día tan especial junto a ti</p>
+
+      <div class="fecha rv">
+        <span class="lado">Sábado</span>
+        <span class="barra"></span>
+        <span class="centro">
+          <span class="num">10</span>
+          <span class="anio" style="display:block">Octubre 2026</span>
+        </span>
+        <span class="barra"></span>
+        <span class="lado">17:30 hrs</span>
+      </div>
+
+      <div class="contador rv" id="contador">
+        <div><b id="c-d">—</b><small>Días</small></div>
+        <div><b id="c-h">—</b><small>Horas</small></div>
+        <div><b id="c-m">—</b><small>Min</small></div>
+        <div><b id="c-s">—</b><small>Seg</small></div>
+      </div>
+
+      <div class="musica rv" id="musica" data-abierto="0" style="margin-left:auto;margin-right:auto">
+        <button class="musica-btn" id="musica-btn" aria-expanded="false" aria-controls="musica-wrap">
+          <span class="ico" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </span>
+          <span class="tx"><b>Your Song — Elton John</b><small>Nuestra canción</small></span>
+          <span class="chev" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </button>
+        <div class="musica-wrap" id="musica-wrap"></div>
+      </div>
+    </div>
+
+    <div class="flecha" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </section>
+
+  <!-- ============ 2 · INFO ============ -->
+  <section id="info">
+    <p class="kicker rv">Información</p>
+    <h2 class="titulo-sec rv" style="margin-top:.6rem">Todo lo que necesitas</h2>
+    <div class="filete rv"><span>&#10086;</span></div>
+
+    <div class="tarjetas">
+      <a class="tarjeta rv" id="link-rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <span class="cuerpo">
+          <h3>Confirma tu asistencia</h3>
+          <p>Completa el formulario para reservar tu lugar.</p>
+        </span>
+        <span class="go" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </a>
+
+      <a class="tarjeta rv" href="https://www.google.com/maps/place/San+Miguel+de+Tango,Lonqu%C3%A9n+Sur/@-33.6542824,-70.828958,17z/data=!3m1!4b1!4m6!3m5!1s0x9662de126f63a1b1:0xdd698f0975af9c69!8m2!3d-33.6542824!4d-70.828958!16s%2Fg%2F11bx1scz_6" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </span>
+        <span class="cuerpo">
+          <h3>San Miguel de Tango</h3>
+          <p>Av. Lonquén Sur, Paradero 26 ½, Calera de Tango. Toca para llegar.</p>
+        </span>
+        <span class="go" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </a>
+
+      <a class="tarjeta rv" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        </span>
+        <span class="cuerpo">
+          <h3>Lista de novios</h3>
+          <p>Tu presencia es nuestro regalo. Si quieres, aquí está la lista.</p>
+        </span>
+        <span class="go" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="flecha" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </section>
+
+  <!-- ============ 3 · OTROS ============ -->
+  <section id="otros">
+    <p class="kicker rv">Antes de la fiesta</p>
+    <div class="filete rv"><span>&#10086;</span></div>
+
+    <div class="detalles">
+      <div class="detalle rv">
+        <h3>Código de vestimenta</h3>
+        <p><strong>Formal.</strong><br>El color blanco está reservado para la novia.</p>
+      </div>
+      <div class="detalle rv">
+        <h3>Sin niños</h3>
+        <p>Un evento para adultos lleno de diversión:<br>dejamos a los niños en casa esta vez.</p>
+      </div>
+    </div>
+
+    <p class="cierre rv">Esperamos que puedas acompañarnos.</p>
+
+    <div class="foto-final rv">
+      <img src="img/final.jpg" alt="Patricio y Maite" loading="lazy">
+    </div>
+
+    <p class="firma rv">Patricio &amp; Maite</p>
+    <p class="pie rv">10 · 10 · 2026</p>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  var nombre = (params.get('nombre') || '').trim();
+
+  // Nombre del invitado (sanitizado vía textContent)
+  var el = document.getElementById('invitado');
+  el.textContent = nombre ? nombre : 'Familia y amigos';
+
+  // Precarga del formulario con el nombre del invitado
+  var rsvp = document.getElementById('link-rsvp');
+  var base = 'https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform';
+  if (nombre) {
+    rsvp.href = base + '?usp=pp_url&entry.1216997967=' + encodeURIComponent(nombre);
+  }
+
+  // Título de la pestaña
+  if (nombre) document.title = nombre + ' · Patricio & Maite';
+
+  // ---------- Contador ----------
+  // 10 de octubre de 2026, 17:30 hrs — Chile continental (UTC-3)
+  var boda = new Date('2026-10-10T17:30:00-03:00').getTime();
+  var d = document.getElementById('c-d'), h = document.getElementById('c-h'),
+      m = document.getElementById('c-m'), s = document.getElementById('c-s');
+
+  function tick(){
+    var falta = boda - Date.now();
+    if (falta <= 0) {
+      document.getElementById('contador').innerHTML =
+        '<div style="min-width:auto"><b style="font-size:1.6rem">¡Hoy nos casamos!</b></div>';
+      clearInterval(timer);
+      return;
+    }
+    var seg = Math.floor(falta / 1000);
+    d.textContent = Math.floor(seg / 86400);
+    h.textContent = String(Math.floor(seg / 3600) % 24).padStart(2, '0');
+    m.textContent = String(Math.floor(seg / 60) % 60).padStart(2, '0');
+    s.textContent = String(seg % 60).padStart(2, '0');
+  }
+  tick();
+  var timer = setInterval(tick, 1000);
+
+  // ---------- Spotify: se inyecta sólo al abrir ----------
+  var musica = document.getElementById('musica'),
+      btn = document.getElementById('musica-btn'),
+      wrap = document.getElementById('musica-wrap');
+
+  btn.addEventListener('click', function(){
+    var abierto = musica.dataset.abierto === '1';
+    musica.dataset.abierto = abierto ? '0' : '1';
+    btn.setAttribute('aria-expanded', String(!abierto));
+    if (!abierto && !wrap.firstChild) {
+      var f = document.createElement('iframe');
+      f.src = 'https://open.spotify.com/embed/track/38zsOOcu31XbbYj9BIPUF1?utm_source=generator';
+      f.width = '100%'; f.height = '80'; f.frameBorder = '0';
+      f.style.borderRadius = '12px';
+      f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+      f.loading = 'lazy';
+      f.title = 'Your Song — Elton John';
+      wrap.appendChild(f);
+    }
+  });
+
+  // ---------- Reveal on scroll ----------
+  var io = new IntersectionObserver(function(entradas){
+    entradas.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
+  }, { threshold: .18 });
+
+  document.querySelectorAll('.rv').forEach(function(n, i){
+    n.style.transitionDelay = (Math.min(i, 6) * 90) + 'ms';
+    io.observe(n);
+  });
+
+  // La flecha del hero desaparece al bajar
+  var scroll = document.getElementById('scroll');
+  scroll.addEventListener('scroll', function(){
+    var f = document.querySelector('#hero .flecha');
+    if (f) f.style.opacity = scroll.scrollTop > 60 ? '0' : '.75';
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
