@@ -10,7 +10,7 @@
 <meta property="og:image" content="img/hero.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Parisienne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&family=Parisienne&display=swap" rel="stylesheet">
 <style>
   :root{
     --papel:#fbf7f5;
@@ -23,6 +23,7 @@
     --rosa-panel:#f9e7ea;
     --verde:#a9b6a4;
     --linea:rgba(150,120,125,.28);
+    --sans:'Jost',system-ui,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -47,8 +48,8 @@
   section{
     scroll-snap-align:start;
     min-height:100dvh;
-    display:flex;flex-direction:column;align-items:center;
-    padding:2.6rem 1.4rem 3.2rem;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:1.6rem 1.4rem 2.6rem;
     position:relative;
     overflow:hidden;
     text-align:center;
@@ -71,9 +72,12 @@
   section > *:not(.ramo){position:relative;z-index:1}
 
   /* ---------- tipografía ---------- */
+  /* Etiquetas en sans geométrica: el contraste con el serif y la caligrafía
+     es lo que moderniza el conjunto sin perder lo romántico. */
   .rotulo{
-    font-size:.64rem;letter-spacing:.32em;text-transform:uppercase;
-    color:var(--tinta-suave);font-weight:600;
+    font-family:var(--sans);
+    font-size:.6rem;letter-spacing:.38em;text-transform:uppercase;
+    color:var(--tinta-suave);font-weight:400;
   }
   .monograma{
     display:flex;align-items:center;justify-content:center;gap:.85rem;
@@ -83,8 +87,8 @@
   .nombres{
     font-family:'Parisienne',cursive;
     font-weight:400;
-    font-size:clamp(3rem,13vw,4.4rem);
-    line-height:.95;
+    font-size:clamp(2.6rem,11.5vw,3.9rem);
+    line-height:.92;
     color:var(--tinta);
   }
   .nombres .amp{display:block;font-size:.5em;color:var(--rosa);margin:.05em 0}
@@ -101,7 +105,7 @@
   }
 
   /* filete */
-  .filete{display:flex;align-items:center;justify-content:center;gap:.7rem;width:11rem;margin:1.1rem auto}
+  .filete{display:flex;align-items:center;justify-content:center;gap:.7rem;width:11rem;margin:.8rem auto}
   .filete::before,.filete::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--linea))}
   .filete::after{background:linear-gradient(90deg,var(--linea),transparent)}
   .filete span{width:5px;height:5px;border-radius:50%;background:var(--rosa-med)}
@@ -121,38 +125,51 @@
     --rasgado:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'%3E%3Cfilter id='r' x='-5%25' y='-5%25' width='110%25' height='110%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.09' numOctaves='4' seed='7' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='16' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3Crect x='4' y='9' width='392' height='482' fill='%23fff' filter='url(%23r)'/%3E%3C/svg%3E");
   }
   .foto img{width:100%;display:block;object-fit:cover}
-  .foto-hero img{height:min(42dvh,20rem);object-position:center 62%}
-  .foto-final img{height:min(34dvh,16rem);object-position:center 45%}
+  .foto-hero img{height:min(34dvh,16rem);object-position:center 62%}
+  .foto-final img{height:min(32dvh,15rem);object-position:center 45%}
 
   /* ---------- 1 · portada ---------- */
   #portada{justify-content:flex-start;gap:0}
-  .fecha{
-    display:flex;align-items:flex-end;justify-content:center;gap:1rem;
-    margin:0 auto;width:max-content;
+  /* Fecha en una estructura limpia: día + hora, sin la caja tipográfica anterior. */
+  .fecha{margin:0 auto}
+  .fecha .dia{font-size:1.4rem;font-weight:500;letter-spacing:.01em;line-height:1.2}
+  .fecha .dia b{color:var(--rosa);font-weight:600}
+  .fecha .hora{
+    font-family:var(--sans);font-size:.66rem;font-weight:400;
+    letter-spacing:.34em;text-transform:uppercase;color:var(--tinta-suave);
+    margin-top:.4rem;display:inline-flex;align-items:center;gap:.55rem;
   }
-  .fecha .caja{margin-bottom:.6rem}
-  .fecha .col{display:flex;flex-direction:column;align-items:center;gap:.3rem}
-  .fecha .mes{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);font-weight:600}
-  .fecha .num{font-size:3.1rem;font-weight:300;line-height:.9}
-  .fecha .caja{
-    border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
-    padding:.3rem .7rem;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--tinta-suave);white-space:nowrap;
-  }
+  .fecha .hora::before,.fecha .hora::after{content:"";width:1.1rem;height:1px;background:var(--linea)}
   /* contador estilo 0 : 00 : 00 : 00 */
   .contador{display:flex;align-items:flex-start;justify-content:center;gap:.35rem;margin-top:.2rem}
   .contador .u{display:flex;flex-direction:column;align-items:center;min-width:2.6rem}
-  .contador .u b{font-size:2.1rem;font-weight:300;color:var(--rosa);line-height:1;font-variant-numeric:tabular-nums}
-  .contador .u small{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-suave);margin-top:.25rem}
-  .contador .sep{font-size:1.8rem;font-weight:300;color:var(--rosa-med);line-height:1.1}
+  .contador .u b{font-size:2rem;font-weight:300;color:var(--rosa);line-height:1;font-variant-numeric:tabular-nums}
+  .contador .u small{font-family:var(--sans);font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave);margin-top:.35rem}
+  .contador .sep{font-size:1.7rem;font-weight:300;color:var(--rosa-med);line-height:1.05}
 
-  /* ---------- reproductor ---------- */
+  /* ---------- tarjeta de música ----------
+     El texto y el reproductor van en un mismo marco para que se lean como una
+     sola pieza. */
+  .music-card{
+    margin-top:1.3rem;width:100%;max-width:19.5rem;margin-inline:auto;
+    border:1px solid var(--rosa-suave);border-radius:1.1rem;
+    background:var(--rosa-panel);
+    padding:.85rem 1rem .5rem;
+    overflow:hidden;
+  }
+  /* El texto va por encima de la tapa que cubre el iframe. */
+  .music-card .label{
+    position:relative;z-index:2;
+    font-family:var(--sans);font-size:.58rem;font-weight:400;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--rosa);
+  }
+  .music-card .cancion{position:relative;z-index:2;font-style:italic;font-size:1.05rem;color:var(--tinta);margin-top:.15rem}
+
   /* El embed de Spotify NO reproduce si no está pintado, así que se deja a
-     tamaño real y se cubre con una tapa opaca; la textura de papel va encima
-     de todo, por lo que la tapa no se nota. */
-  .musica{position:relative;height:80px;display:flex;align-items:center;justify-content:center;margin-top:.5rem}
-  .musica-oculta{position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:80px;z-index:0;pointer-events:none}
-  .musica-tapa{position:absolute;top:-2px;bottom:-2px;left:-50vw;right:-50vw;background:var(--papel);z-index:1;pointer-events:none}
+     tamaño real y se cubre con una tapa opaca del color de la tarjeta. */
+  .musica{position:relative;height:64px;display:flex;align-items:center;justify-content:center;margin-top:.35rem}
+  .musica-oculta{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:300px;height:80px;z-index:0;pointer-events:none}
+  .musica-tapa{position:absolute;top:-40px;bottom:-40px;left:-50vw;right:-50vw;background:var(--rosa-panel);z-index:1;pointer-events:none}
   .musica-btn{
     position:relative;z-index:2;
     display:inline-flex;align-items:center;gap:.7rem;
@@ -182,25 +199,27 @@
   /* ---------- 2 · bloques de información ---------- */
   .bloque{max-width:23rem;margin-inline:auto}
   .bloque .ico{color:var(--rosa);margin-bottom:.5rem}
-  .bloque h3{font-size:1.02rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
-  .bloque .sub{font-size:.9rem;color:var(--tinta-suave);line-height:1.6;margin-top:.3rem;font-style:italic}
+  .bloque h3{font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase}
+  .bloque .sub{font-size:.95rem;color:var(--tinta-suave);line-height:1.6;margin-top:.35rem;font-style:italic}
   .pill{
-    display:inline-block;margin-top:.8rem;
-    background:var(--rosa-panel);
-    border:1px solid var(--rosa-suave);
-    border-radius:.35rem;
-    padding:.4rem 1.15rem;
-    font-family:inherit;font-size:.82rem;letter-spacing:.04em;
-    color:#7d545d;text-decoration:underline;text-underline-offset:2px;
-    transition:background .3s ease,transform .3s ease;
+    display:inline-flex;align-items:center;gap:.5rem;margin-top:.85rem;
+    background:transparent;
+    border:1px solid var(--rosa-med);
+    border-radius:2rem;
+    padding:.5rem 1.25rem;
+    font-family:var(--sans);font-size:.66rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;
+    color:#7d545d;text-decoration:none;
+    transition:background .3s ease,color .3s ease,transform .3s ease;
   }
-  .pill:hover{background:var(--rosa-suave);transform:translateY(-1px)}
+  .pill svg{transition:transform .3s ease}
+  .pill:hover{background:var(--rosa);color:#fff;transform:translateY(-1px)}
+  .pill:hover svg{transform:translateX(3px)}
   .separador{width:100%;max-width:16rem;height:1px;background:var(--linea);margin:1.9rem auto;opacity:.7}
 
   /* ---------- 3 · detalles ---------- */
   .detalle{max-width:22rem;margin-inline:auto}
   .detalle .ico{color:var(--rosa);margin-bottom:.55rem}
-  .detalle h3{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
+  .detalle h3{font-family:var(--sans);font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;font-weight:500;color:var(--rosa);margin-bottom:.4rem}
   .detalle p{font-size:.92rem;line-height:1.7;color:var(--tinta-suave)}
   .detalle p strong{color:var(--tinta);font-weight:600;font-style:normal}
   .gracias{font-family:'Parisienne',cursive;font-size:2rem;color:var(--rosa);margin-top:.6rem}
@@ -295,12 +314,12 @@
     <svg class="ramo ar-sd" aria-hidden="true"><use href="#ramo"/></svg>
     <svg class="ramo ar-id" aria-hidden="true"><use href="#ramo"/></svg>
 
-    <div class="monograma rv on" style="margin-top:.4rem">
+    <div class="monograma rv on">
       <span>P</span><i></i><span>M</span>
     </div>
-    <p class="rotulo rv on" style="margin-top:.9rem">¡Nos casamos!</p>
+    <p class="rotulo rv on" style="margin-top:.7rem">¡Nos casamos!</p>
 
-    <div class="foto foto-hero rv on" style="margin:1.4rem 0 1.5rem">
+    <div class="foto foto-hero rv on" style="margin:1.1rem 0 1.2rem">
       <img src="img/hero.jpg" alt="Patricio y Maite" fetchpriority="high">
     </div>
 
@@ -312,33 +331,33 @@
     <p class="invitado rv" id="invitado">&nbsp;</p>
     <p class="parrafo rv">Nos encantaría celebrar<br>este día tan especial junto a ti.</p>
 
-    <p class="parrafo rv" style="margin-top:1.5rem;font-style:italic">Dale play a nuestra canción</p>
-    <div class="musica rv" id="musica" data-sonando="0">
-      <!-- La API de Spotify reemplaza el nodo interior por su iframe,
-           por eso quien posiciona es el contenedor padre. -->
-      <div class="musica-oculta" aria-hidden="true"><div id="spotify-host"></div></div>
-      <div class="musica-tapa" aria-hidden="true"></div>
-      <button class="musica-btn" id="musica-btn" disabled aria-label="Reproducir Your Song de Elton John">
-        <span class="raya" aria-hidden="true"></span>
-        <span class="disco" aria-hidden="true">
-          <svg class="p-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
-          <svg class="p-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-        </span>
-        <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="raya" aria-hidden="true"></span>
-      </button>
+    <div class="fecha rv" style="margin-top:1rem">
+      <div class="dia">Sábado <b>10</b> de Octubre, 2026</div>
+      <div class="hora">17:30 hrs</div>
     </div>
 
-    <div class="fecha rv" style="margin-top:1.2rem">
-      <div class="caja">Sábado</div>
-      <div class="col">
-        <span class="mes">Octubre</span>
-        <span class="num">10</span>
+    <div class="music-card rv">
+      <p class="label">Nuestra canción</p>
+      <p class="cancion">Dale play &amp; acompáñanos</p>
+      <div class="musica" id="musica" data-sonando="0">
+        <!-- La API de Spotify reemplaza el nodo interior por su iframe,
+             por eso quien posiciona es el contenedor padre. -->
+        <div class="musica-oculta" aria-hidden="true"><div id="spotify-host"></div></div>
+        <div class="musica-tapa" aria-hidden="true"></div>
+        <button class="musica-btn" id="musica-btn" disabled aria-label="Reproducir Your Song de Elton John">
+          <span class="raya" aria-hidden="true"></span>
+          <span class="disco" aria-hidden="true">
+            <svg class="p-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+            <svg class="p-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          </span>
+          <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="raya" aria-hidden="true"></span>
+        </button>
       </div>
-      <div class="caja">2026</div>
     </div>
-    <p class="rotulo rv" style="margin-top:1.4rem">Faltan</p>
-    <div class="contador rv" id="contador" style="margin-top:.5rem">
+
+    <p class="rotulo rv" style="margin-top:1.1rem">Faltan</p>
+    <div class="contador rv" id="contador" style="margin-top:.45rem">
       <span class="u"><b id="c-d">—</b><small>Días</small></span>
       <span class="sep">:</span>
       <span class="u"><b id="c-h">—</b><small>Horas</small></span>
