@@ -88,7 +88,7 @@
     width:100%;
     max-width:30rem;
     aspect-ratio:4/5;
-    max-height:36dvh;
+    max-height:31dvh;
     overflow:hidden;
     position:relative;
     border-radius:0 0 999px 999px;
@@ -128,32 +128,67 @@
   .contador b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.25rem,5vw,1.6rem);line-height:1.15}
   .contador small{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)}
 
-  /* spotify compacto */
-  .musica{margin-top:1.25rem;width:100%;max-width:18.5rem}
+  /* Música: botón propio sobre el reproductor de Spotify.
+     El reproductor NO se puede ocultar con display/opacity/clip: el embed de
+     Spotify se niega a reproducir si no está pintado. Por eso se deja pintado
+     a tamaño real y se cubre con una tapa opaca del color del fondo. */
+  .musica{
+    position:relative;
+    height:80px;                 /* alto real del iframe de Spotify */
+    margin-top:.9rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .musica-oculta{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:300px;height:80px;
+    z-index:0;pointer-events:none;
+  }
+  .musica-tapa{
+    position:absolute;top:-2px;bottom:-2px;left:-50vw;right:-50vw;
+    background:var(--arena);
+    z-index:1;pointer-events:none;
+  }
   .musica-btn{
-    width:100%;
-    display:flex;align-items:center;gap:.75rem;
-    background:var(--blanco);
-    border:1px solid rgba(176,141,82,.28);
-    border-radius:999px;
-    padding:.6rem .95rem;
+    display:inline-flex;align-items:center;gap:.6rem;
+    background:transparent;
+    border:0;
+    padding:.35rem .5rem;
     cursor:pointer;
     font-family:inherit;
-    color:var(--tinta);
-    text-align:left;
-    transition:box-shadow .3s ease,transform .3s ease;
+    color:var(--tinta-suave);
+    transition:color .3s ease,opacity .3s ease;
+    position:relative;z-index:2;   /* por encima de la tapa */
   }
-  .musica-btn:hover{box-shadow:0 8px 22px -12px rgba(61,50,38,.5);transform:translateY(-1px)}
-  .musica-btn .ico{flex:0 0 auto;color:var(--oro)}
-  .musica-btn .tx{flex:1;min-width:0}
-  .musica-btn .tx b{display:block;font-weight:400;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .musica-btn .tx small{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-suave)}
-  .musica-btn .chev{transition:transform .3s ease;color:var(--tinta-suave)}
-  .musica[data-abierto="1"] .chev{transform:rotate(180deg)}
-  .musica-wrap{max-height:0;overflow:hidden;transition:max-height .45s ease,margin .45s ease}
-  .musica[data-abierto="1"] .musica-wrap{max-height:180px;margin-top:.6rem}
+  .musica-btn[disabled]{opacity:.45;cursor:default}
+  .musica-btn:hover:not([disabled]){color:var(--tinta)}
+  .musica-btn .disco{
+    flex:0 0 auto;width:2.15rem;height:2.15rem;border-radius:50%;
+    border:1px solid rgba(176,141,82,.45);
+    display:grid;place-items:center;
+    color:var(--oro);
+    transition:background .3s ease,border-color .3s ease,transform .3s ease;
+  }
+  .musica-btn:hover:not([disabled]) .disco{background:rgba(216,189,139,.16);transform:scale(1.05)}
+  .musica-btn .disco svg{display:block}
+  .musica-btn .disco .p-pause{display:none}
+  .musica[data-sonando="1"] .disco{background:rgba(216,189,139,.22);border-color:var(--oro)}
+  .musica[data-sonando="1"] .disco .p-play{display:none}
+  .musica[data-sonando="1"] .disco .p-pause{display:block}
+  .musica-btn .tx{text-align:left;line-height:1.35}
+  .musica-btn .tx b{display:block;font-weight:400;font-size:.72rem;letter-spacing:.02em;color:var(--tinta)}
+  .musica-btn .tx small{font-size:.54rem;letter-spacing:.22em;text-transform:uppercase}
+  /* ondas de sonido */
+  .ondas{display:inline-flex;align-items:flex-end;gap:2px;height:.6rem;margin-left:.15rem;opacity:0;transition:opacity .3s ease}
+  .musica[data-sonando="1"] .ondas{opacity:1}
+  .ondas i{width:2px;background:var(--oro);border-radius:1px;height:30%}
+  .musica[data-sonando="1"] .ondas i{animation:onda .9s ease-in-out infinite}
+  .ondas i:nth-child(2){animation-delay:.15s}
+  .ondas i:nth-child(3){animation-delay:.3s}
+  .ondas i:nth-child(4){animation-delay:.45s}
+  @keyframes onda{0%,100%{height:25%}50%{height:100%}}
+  @media (prefers-reduced-motion:reduce){.musica[data-sonando="1"] .ondas i{animation:none;height:60%}}
 
-  .flecha{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:var(--oro);animation:fl 2.4s ease-in-out infinite;opacity:.75}
+  .flecha{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:var(--oro);animation:fl 2.4s ease-in-out infinite;opacity:.75;z-index:3}
   @keyframes fl{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
 
   /* ---------- 2. INFO ---------- */
@@ -242,17 +277,21 @@
         <div><b id="c-s">—</b><small>Seg</small></div>
       </div>
 
-      <div class="musica rv" id="musica" data-abierto="0" style="margin-left:auto;margin-right:auto">
-        <button class="musica-btn" id="musica-btn" aria-expanded="false" aria-controls="musica-wrap">
-          <span class="ico" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      <div class="musica rv" id="musica" data-sonando="0">
+        <!-- La API de Spotify reemplaza el nodo interior por su iframe,
+             por eso quien posiciona es el contenedor padre. -->
+        <div class="musica-oculta" aria-hidden="true"><div id="spotify-host"></div></div>
+        <div class="musica-tapa" aria-hidden="true"></div>
+        <button class="musica-btn" id="musica-btn" disabled aria-label="Reproducir Your Song de Elton John">
+          <span class="disco" aria-hidden="true">
+            <svg class="p-play" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+            <svg class="p-pause" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
           </span>
-          <span class="tx"><b>Your Song — Elton John</b><small>Nuestra canción</small></span>
-          <span class="chev" aria-hidden="true">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="tx">
+            <b>Your Song <span class="ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span></b>
+            <small>Elton John · nuestra canción</small>
           </span>
         </button>
-        <div class="musica-wrap" id="musica-wrap"></div>
       </div>
     </div>
 
@@ -383,26 +422,41 @@
   tick();
   var timer = setInterval(tick, 1000);
 
-  // ---------- Spotify: se inyecta sólo al abrir ----------
+  // ---------- Música: botón propio sobre el reproductor oculto de Spotify ----------
+  // Se usa la IFrame API de Spotify: el reproductor sigue existiendo (es quien
+  // reproduce), pero la UI visible es el botón de arriba.
   var musica = document.getElementById('musica'),
-      btn = document.getElementById('musica-btn'),
-      wrap = document.getElementById('musica-wrap');
+      btn = document.getElementById('musica-btn');
+  var ctrl = null;
 
+  window.onSpotifyIframeApiReady = function(IFrameAPI){
+    IFrameAPI.createController(
+      document.getElementById('spotify-host'),
+      { uri: 'spotify:track:38zsOOcu31XbbYj9BIPUF1', width: 300, height: 80 },
+      function(controller){
+        ctrl = controller;
+        btn.disabled = false;
+        controller.addListener('playback_update', function(e){
+          musica.dataset.sonando = (e.data && !e.data.isPaused) ? '1' : '0';
+          btn.setAttribute('aria-label',
+            (e.data && !e.data.isPaused ? 'Pausar' : 'Reproducir') + ' Your Song de Elton John');
+        });
+      }
+    );
+  };
+
+  // Un único listener: si el reproductor cargó, controla; si no, abre Spotify.
   btn.addEventListener('click', function(){
-    var abierto = musica.dataset.abierto === '1';
-    musica.dataset.abierto = abierto ? '0' : '1';
-    btn.setAttribute('aria-expanded', String(!abierto));
-    if (!abierto && !wrap.firstChild) {
-      var f = document.createElement('iframe');
-      f.src = 'https://open.spotify.com/embed/track/38zsOOcu31XbbYj9BIPUF1?utm_source=generator';
-      f.width = '100%'; f.height = '80'; f.frameBorder = '0';
-      f.style.borderRadius = '12px';
-      f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
-      f.loading = 'lazy';
-      f.title = 'Your Song — Elton John';
-      wrap.appendChild(f);
+    if (ctrl) {
+      ctrl.togglePlay();
+    } else {
+      window.open('https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1', '_blank', 'noopener');
     }
   });
+
+  // Si Spotify no cargó (bloqueado, sin red), igual se habilita el botón
+  // para que al menos abra la canción en Spotify.
+  setTimeout(function(){ btn.disabled = false; }, 6000);
 
   // ---------- Reveal on scroll ----------
   var io = new IntersectionObserver(function(entradas){
@@ -422,5 +476,6 @@
   }, { passive: true });
 })();
 </script>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
