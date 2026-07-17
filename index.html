@@ -10,372 +10,431 @@
 <meta property="og:image" content="img/hero.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Parisienne&display=swap" rel="stylesheet">
 <style>
   :root{
-    --arena:#f6f1e9;
-    --arena-alt:#efe7db;
-    --tinta:#3d3226;
-    --tinta-suave:#6b5d4c;
-    --oro:#b08d52;
-    --oro-claro:#d8bd8b;
-    --blanco:#fffdfa;
+    --papel:#fbf7f5;
+    --papel-2:#f7edeb;
+    --tinta:#4b3f41;
+    --tinta-suave:#8d7c7f;
+    --rosa:#d38b9b;
+    --rosa-med:#e5adb8;
+    --rosa-suave:#f0cdd4;
+    --rosa-panel:#f9e7ea;
+    --verde:#a9b6a4;
+    --linea:rgba(150,120,125,.28);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    background:var(--arena);
+    background:var(--papel);
     color:var(--tinta);
-    font-family:'Jost',system-ui,sans-serif;
-    font-weight:300;
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-weight:400;
     -webkit-font-smoothing:antialiased;
     overflow-x:hidden;
   }
-  .scroll{
-    height:100dvh;
-    overflow-y:scroll;
-    scroll-snap-type:y proximity;
-    scrollbar-width:none;
+  /* Textura de papel: va por ENCIMA de todo (incluida la tapa del reproductor)
+     para que no se note ningún parche liso. No intercepta clics. */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:50;pointer-events:none;
+    mix-blend-mode:multiply;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
   }
+
+  .scroll{height:100dvh;overflow-y:scroll;scroll-snap-type:y proximity;scrollbar-width:none}
   .scroll::-webkit-scrollbar{display:none}
   section{
     scroll-snap-align:start;
     min-height:100dvh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:clamp(2rem,6vw,4rem) 1.5rem;
+    display:flex;flex-direction:column;align-items:center;
+    padding:2.6rem 1.4rem 3.2rem;
     position:relative;
+    overflow:hidden;
+    text-align:center;
   }
+  #info{background:var(--papel-2)}
 
   /* ---------- reveal ---------- */
-  .rv{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
+  .rv{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
   .rv.on{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
+  /* ---------- ramos de acuarela ---------- */
+  .ramo{position:absolute;width:13.5rem;height:13.5rem;pointer-events:none;opacity:.9;z-index:0}
+  .ramo.ar-si{top:-2.6rem;right:-3.2rem;transform:scaleX(-1) rotate(-8deg)}
+  .ramo.ar-sd{top:-3rem;left:-3.4rem;transform:rotate(6deg)}
+  .ramo.ar-ii{bottom:-3.2rem;left:-3.4rem;transform:scaleY(-1) rotate(-6deg)}
+  .ramo.ar-id{bottom:-3rem;right:-3.2rem;transform:scale(-1) rotate(8deg)}
+  /* En la portada el ramo inferior se comía el contador: más chico y más al borde. */
+  #portada .ar-id{width:9rem;height:9rem;bottom:-3.4rem;right:-4.6rem;opacity:.6}
+  section > *:not(.ramo){position:relative;z-index:1}
+
   /* ---------- tipografía ---------- */
+  .rotulo{
+    font-size:.64rem;letter-spacing:.32em;text-transform:uppercase;
+    color:var(--tinta-suave);font-weight:600;
+  }
+  .monograma{
+    display:flex;align-items:center;justify-content:center;gap:.85rem;
+    font-size:2.5rem;font-weight:300;letter-spacing:.06em;line-height:1;
+  }
+  .monograma i{width:1px;height:2.1rem;background:var(--linea);display:block}
   .nombres{
-    font-family:'Cormorant Garamond',serif;
-    font-weight:300;
-    font-size:clamp(2.9rem,11vw,5.5rem);
-    line-height:1;
-    letter-spacing:.01em;
+    font-family:'Parisienne',cursive;
+    font-weight:400;
+    font-size:clamp(3rem,13vw,4.4rem);
+    line-height:.95;
+    color:var(--tinta);
   }
-  .nombres .amp{color:var(--oro);font-style:italic;display:block;font-size:.62em;margin:.12em 0}
-  .kicker{
-    font-size:clamp(.62rem,2.4vw,.78rem);
-    letter-spacing:.42em;
-    text-transform:uppercase;
-    color:var(--tinta-suave);
+  .nombres .amp{display:block;font-size:.5em;color:var(--rosa);margin:.05em 0}
+  .parrafo{
+    font-size:.95rem;line-height:1.7;color:var(--tinta-suave);
+    max-width:21rem;margin-inline:auto;
   }
-  .titulo-sec{
-    font-family:'Cormorant Garamond',serif;
-    font-size:clamp(1.9rem,6vw,2.9rem);
-    font-weight:300;
-    letter-spacing:.02em;
-  }
-
-  /* ---------- filete decorativo ---------- */
-  .filete{display:flex;align-items:center;gap:.9rem;justify-content:center;width:100%;max-width:15rem;margin:1.4rem auto}
-  .filete::before,.filete::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--oro-claro))}
-  .filete::after{background:linear-gradient(90deg,var(--oro-claro),transparent)}
-  .filete span{color:var(--oro);font-size:.7rem}
-
-  /* ---------- 1. HERO ---------- */
-  #hero{justify-content:flex-start;gap:0;padding:0 1.25rem 2.6rem}
-  .foto-hero{
-    width:100%;
-    max-width:30rem;
-    aspect-ratio:4/5;
-    max-height:31dvh;
-    overflow:hidden;
-    position:relative;
-    border-radius:0 0 999px 999px;
-    box-shadow:0 18px 45px -22px rgba(61,50,38,.55);
-  }
-  .foto-hero img{width:100%;height:100%;object-fit:cover;object-position:center 62%}
-  .foto-hero::after{
-    content:"";position:absolute;inset:0;
-    background:linear-gradient(to bottom,rgba(246,241,233,.35) 0%,transparent 28%,transparent 72%,rgba(246,241,233,.9) 100%);
-  }
-  .hero-txt{text-align:center;margin-top:-.6rem;position:relative;z-index:2;width:100%}
-  .invita{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--tinta-suave)}
   .invitado{
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic;
-    font-size:clamp(1.35rem,5vw,1.9rem);
-    color:var(--oro);
-    margin:.25rem 0 .3rem;
-    min-height:1.2em;
+    font-family:'Parisienne',cursive;
+    font-size:clamp(1.7rem,6.5vw,2.3rem);
+    color:var(--rosa);
+    margin:.15rem 0 .45rem;
+    min-height:1.15em;line-height:1.2;
   }
-  .mensaje{font-size:.68rem;line-height:1.85;letter-spacing:.12em;color:var(--tinta-suave);text-transform:uppercase;max-width:22rem;margin:0 auto}
 
+  /* filete */
+  .filete{display:flex;align-items:center;justify-content:center;gap:.7rem;width:11rem;margin:1.1rem auto}
+  .filete::before,.filete::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--linea))}
+  .filete::after{background:linear-gradient(90deg,var(--linea),transparent)}
+  .filete span{width:5px;height:5px;border-radius:50%;background:var(--rosa-med)}
+
+  /* ---------- fotos con borde rasgado ----------
+     El borde irregular se hace con una MÁSCARA, no con un filtro sobre la
+     imagen: un filtro desplazaría también el interior y ondularía la foto.
+     La máscara es un rectángulo blanco desplazado — su interior es uniforme,
+     así que sólo se deshilachan los bordes. */
+  .foto{
+    width:100%;max-width:24rem;
+    -webkit-mask-image:var(--rasgado);mask-image:var(--rasgado);
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  }
+  :root{
+    --rasgado:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 500' preserveAspectRatio='none'%3E%3Cfilter id='r' x='-5%25' y='-5%25' width='110%25' height='110%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.09' numOctaves='4' seed='7' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='16' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3Crect x='4' y='9' width='392' height='482' fill='%23fff' filter='url(%23r)'/%3E%3C/svg%3E");
+  }
+  .foto img{width:100%;display:block;object-fit:cover}
+  .foto-hero img{height:min(42dvh,20rem);object-position:center 62%}
+  .foto-final img{height:min(34dvh,16rem);object-position:center 45%}
+
+  /* ---------- 1 · portada ---------- */
+  #portada{justify-content:flex-start;gap:0}
   .fecha{
-    margin:1.1rem auto 0;
-    display:flex;align-items:center;justify-content:center;
-    gap:clamp(.8rem,3.5vw,1.3rem);
-    width:max-content;
+    display:flex;align-items:flex-end;justify-content:center;gap:1rem;
+    margin:0 auto;width:max-content;
   }
-  .fecha .lado{font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;color:var(--tinta-suave);white-space:nowrap}
-  .fecha .barra{width:1px;height:2.6rem;background:var(--oro-claro);flex:0 0 auto}
-  .fecha .centro .num{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,10vw,3.4rem);line-height:.92;font-weight:300}
-  .anio{margin-top:.28rem;font-size:.58rem;letter-spacing:.34em;color:var(--oro);text-transform:uppercase}
+  .fecha .caja{margin-bottom:.6rem}
+  .fecha .col{display:flex;flex-direction:column;align-items:center;gap:.3rem}
+  .fecha .mes{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);font-weight:600}
+  .fecha .num{font-size:3.1rem;font-weight:300;line-height:.9}
+  .fecha .caja{
+    border-top:1px solid var(--linea);border-bottom:1px solid var(--linea);
+    padding:.3rem .7rem;font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--tinta-suave);white-space:nowrap;
+  }
+  /* contador estilo 0 : 00 : 00 : 00 */
+  .contador{display:flex;align-items:flex-start;justify-content:center;gap:.35rem;margin-top:.2rem}
+  .contador .u{display:flex;flex-direction:column;align-items:center;min-width:2.6rem}
+  .contador .u b{font-size:2.1rem;font-weight:300;color:var(--rosa);line-height:1;font-variant-numeric:tabular-nums}
+  .contador .u small{font-size:.5rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tinta-suave);margin-top:.25rem}
+  .contador .sep{font-size:1.8rem;font-weight:300;color:var(--rosa-med);line-height:1.1}
 
-  /* contador */
-  .contador{display:flex;gap:clamp(.8rem,4vw,1.6rem);justify-content:center;margin-top:1.2rem}
-  .contador div{min-width:2.7rem}
-  .contador b{display:block;font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(1.25rem,5vw,1.6rem);line-height:1.15}
-  .contador small{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave)}
-
-  /* Música: botón propio sobre el reproductor de Spotify.
-     El reproductor NO se puede ocultar con display/opacity/clip: el embed de
-     Spotify se niega a reproducir si no está pintado. Por eso se deja pintado
-     a tamaño real y se cubre con una tapa opaca del color del fondo. */
-  .musica{
-    position:relative;
-    height:80px;                 /* alto real del iframe de Spotify */
-    margin-top:.9rem;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .musica-oculta{
-    position:absolute;top:0;left:50%;transform:translateX(-50%);
-    width:300px;height:80px;
-    z-index:0;pointer-events:none;
-  }
-  .musica-tapa{
-    position:absolute;top:-2px;bottom:-2px;left:-50vw;right:-50vw;
-    background:var(--arena);
-    z-index:1;pointer-events:none;
-  }
+  /* ---------- reproductor ---------- */
+  /* El embed de Spotify NO reproduce si no está pintado, así que se deja a
+     tamaño real y se cubre con una tapa opaca; la textura de papel va encima
+     de todo, por lo que la tapa no se nota. */
+  .musica{position:relative;height:80px;display:flex;align-items:center;justify-content:center;margin-top:.5rem}
+  .musica-oculta{position:absolute;top:0;left:50%;transform:translateX(-50%);width:300px;height:80px;z-index:0;pointer-events:none}
+  .musica-tapa{position:absolute;top:-2px;bottom:-2px;left:-50vw;right:-50vw;background:var(--papel);z-index:1;pointer-events:none}
   .musica-btn{
-    display:inline-flex;align-items:center;gap:.6rem;
-    background:transparent;
-    border:0;
-    padding:.35rem .5rem;
-    cursor:pointer;
-    font-family:inherit;
-    color:var(--tinta-suave);
-    transition:color .3s ease,opacity .3s ease;
-    position:relative;z-index:2;   /* por encima de la tapa */
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:.7rem;
+    background:transparent;border:0;cursor:pointer;font-family:inherit;color:var(--tinta-suave);
+    padding:.3rem;transition:opacity .3s ease;
   }
   .musica-btn[disabled]{opacity:.45;cursor:default}
-  .musica-btn:hover:not([disabled]){color:var(--tinta)}
+  .musica-btn .raya{width:2.6rem;height:1px;background:var(--linea)}
   .musica-btn .disco{
-    flex:0 0 auto;width:2.15rem;height:2.15rem;border-radius:50%;
-    border:1px solid rgba(176,141,82,.45);
-    display:grid;place-items:center;
-    color:var(--oro);
-    transition:background .3s ease,border-color .3s ease,transform .3s ease;
+    width:2.5rem;height:2.5rem;border-radius:50%;
+    background:var(--rosa-panel);border:1px solid var(--rosa-suave);
+    display:grid;place-items:center;color:var(--rosa);
+    transition:background .3s ease,transform .3s ease;
   }
-  .musica-btn:hover:not([disabled]) .disco{background:rgba(216,189,139,.16);transform:scale(1.05)}
-  .musica-btn .disco svg{display:block}
+  .musica-btn:hover:not([disabled]) .disco{background:var(--rosa-suave);transform:scale(1.06)}
   .musica-btn .disco .p-pause{display:none}
-  .musica[data-sonando="1"] .disco{background:rgba(216,189,139,.22);border-color:var(--oro)}
   .musica[data-sonando="1"] .disco .p-play{display:none}
   .musica[data-sonando="1"] .disco .p-pause{display:block}
-  .musica-btn .tx{text-align:left;line-height:1.35}
-  .musica-btn .tx b{display:block;font-weight:400;font-size:.72rem;letter-spacing:.02em;color:var(--tinta)}
-  .musica-btn .tx small{font-size:.54rem;letter-spacing:.22em;text-transform:uppercase}
-  /* ondas de sonido */
-  .ondas{display:inline-flex;align-items:flex-end;gap:2px;height:.6rem;margin-left:.15rem;opacity:0;transition:opacity .3s ease}
+  .ondas{display:inline-flex;align-items:flex-end;gap:2px;height:.55rem;opacity:0;transition:opacity .3s ease}
   .musica[data-sonando="1"] .ondas{opacity:1}
-  .ondas i{width:2px;background:var(--oro);border-radius:1px;height:30%}
+  .ondas i{width:2px;background:var(--rosa);border-radius:1px;height:30%}
   .musica[data-sonando="1"] .ondas i{animation:onda .9s ease-in-out infinite}
-  .ondas i:nth-child(2){animation-delay:.15s}
-  .ondas i:nth-child(3){animation-delay:.3s}
-  .ondas i:nth-child(4){animation-delay:.45s}
+  .ondas i:nth-child(2){animation-delay:.15s}.ondas i:nth-child(3){animation-delay:.3s}
   @keyframes onda{0%,100%{height:25%}50%{height:100%}}
   @media (prefers-reduced-motion:reduce){.musica[data-sonando="1"] .ondas i{animation:none;height:60%}}
 
-  .flecha{position:absolute;bottom:1.2rem;left:50%;transform:translateX(-50%);color:var(--oro);animation:fl 2.4s ease-in-out infinite;opacity:.75;z-index:3}
-  @keyframes fl{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+  /* ---------- 2 · bloques de información ---------- */
+  .bloque{max-width:23rem;margin-inline:auto}
+  .bloque .ico{color:var(--rosa);margin-bottom:.5rem}
+  .bloque h3{font-size:1.02rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+  .bloque .sub{font-size:.9rem;color:var(--tinta-suave);line-height:1.6;margin-top:.3rem;font-style:italic}
+  .pill{
+    display:inline-block;margin-top:.8rem;
+    background:var(--rosa-panel);
+    border:1px solid var(--rosa-suave);
+    border-radius:.35rem;
+    padding:.4rem 1.15rem;
+    font-family:inherit;font-size:.82rem;letter-spacing:.04em;
+    color:#7d545d;text-decoration:underline;text-underline-offset:2px;
+    transition:background .3s ease,transform .3s ease;
+  }
+  .pill:hover{background:var(--rosa-suave);transform:translateY(-1px)}
+  .separador{width:100%;max-width:16rem;height:1px;background:var(--linea);margin:1.9rem auto;opacity:.7}
 
-  /* ---------- 2. INFO ---------- */
-  #info{background:var(--arena-alt)}
-  .tarjetas{display:flex;flex-direction:column;gap:1rem;width:100%;max-width:27rem;margin-top:2rem}
-  .tarjeta{
-    display:flex;align-items:center;gap:1.05rem;
-    background:var(--blanco);
-    border:1px solid rgba(176,141,82,.2);
-    border-radius:1.1rem;
-    padding:1.15rem 1.25rem;
-    text-decoration:none;color:inherit;
-    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
-  }
-  .tarjeta:hover{transform:translateY(-3px);box-shadow:0 16px 34px -20px rgba(61,50,38,.6);border-color:var(--oro-claro)}
-  .tarjeta .ico{
-    flex:0 0 auto;width:2.9rem;height:2.9rem;border-radius:50%;
-    background:linear-gradient(150deg,#f8f2e6,#eadfc9);
-    display:grid;place-items:center;color:var(--oro);
-  }
-  .tarjeta .cuerpo{flex:1;min-width:0}
-  .tarjeta h3{font-family:'Cormorant Garamond',serif;font-weight:500;font-size:1.28rem;letter-spacing:.01em}
-  .tarjeta p{font-size:.76rem;line-height:1.55;color:var(--tinta-suave);margin-top:.15rem}
-  .tarjeta .go{flex:0 0 auto;color:var(--oro-claro);transition:transform .3s ease}
-  .tarjeta:hover .go{transform:translateX(3px);color:var(--oro)}
+  /* ---------- 3 · detalles ---------- */
+  .detalle{max-width:22rem;margin-inline:auto}
+  .detalle .ico{color:var(--rosa);margin-bottom:.55rem}
+  .detalle h3{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;margin-bottom:.4rem}
+  .detalle p{font-size:.92rem;line-height:1.7;color:var(--tinta-suave)}
+  .detalle p strong{color:var(--tinta);font-weight:600;font-style:normal}
+  .gracias{font-family:'Parisienne',cursive;font-size:2rem;color:var(--rosa);margin-top:.6rem}
 
-  /* ---------- 3. OTROS ---------- */
-  #otros{background:var(--arena);gap:0}
-  .detalles{display:flex;flex-direction:column;gap:1.6rem;max-width:26rem;text-align:center;margin-top:1.8rem}
-  .detalle h3{font-size:.66rem;letter-spacing:.32em;text-transform:uppercase;color:var(--oro);margin-bottom:.5rem}
-  .detalle p{font-size:.9rem;line-height:1.75;color:var(--tinta-suave)}
-  .detalle p strong{color:var(--tinta);font-weight:400}
-  .cierre{
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic;
-    font-size:clamp(1.35rem,5vw,1.8rem);
-    line-height:1.5;
-    margin:2.2rem auto 1.6rem;
-    max-width:20rem;
-  }
-  .foto-final{
-    width:100%;max-width:22rem;aspect-ratio:3/4;max-height:38dvh;
-    overflow:hidden;border-radius:999px 999px 0 0;
-    box-shadow:0 -12px 40px -24px rgba(61,50,38,.6);
-  }
-  .foto-final img{width:100%;height:100%;object-fit:cover;object-position:center 45%}
-  .firma{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--oro);margin-top:1.4rem}
-  .pie{margin-top:.5rem;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);opacity:.7}
+  .flecha{position:absolute;bottom:.9rem;left:50%;transform:translateX(-50%);color:var(--rosa-med);animation:fl 2.4s ease-in-out infinite;z-index:3}
+  @keyframes fl{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,6px)}}
 </style>
 </head>
 <body>
+
+<!-- ============ definiciones SVG: ramo de acuarela + borde rasgado ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="acuarela" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <filter id="acuarelaSuave" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+    <radialGradient id="gRosa" cx="38%" cy="34%" r="72%">
+      <stop offset="0%" stop-color="#fbe4e9"/><stop offset="55%" stop-color="#eeb7c3"/><stop offset="100%" stop-color="#d98d9f"/>
+    </radialGradient>
+    <radialGradient id="gRosa2" cx="42%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#fdeff2"/><stop offset="60%" stop-color="#f4cbd4"/><stop offset="100%" stop-color="#e3a3b1"/>
+    </radialGradient>
+    <linearGradient id="gHoja" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c3cdbc"/><stop offset="100%" stop-color="#93a38d"/>
+    </linearGradient>
+    <linearGradient id="gHoja2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dfe4d9"/><stop offset="100%" stop-color="#adb9a6"/>
+    </linearGradient>
+
+    <!-- Una rosa: corola de pétalos superpuestos + corazón.
+         Difuminada, lee como acuarela. -->
+    <symbol id="rosa" viewBox="0 0 100 100">
+      <g filter="url(#acuarelaSuave)" opacity=".5">
+        <circle cx="50" cy="50" r="42" fill="url(#gRosa2)"/>
+      </g>
+      <g filter="url(#acuarela)">
+        <g opacity=".9">
+          <ellipse cx="50" cy="27" rx="24" ry="16" fill="url(#gRosa2)"/>
+          <ellipse cx="72" cy="42" rx="24" ry="16" fill="url(#gRosa)" transform="rotate(65 72 42)"/>
+          <ellipse cx="64" cy="70" rx="24" ry="16" fill="url(#gRosa2)" transform="rotate(-58 64 70)"/>
+          <ellipse cx="36" cy="70" rx="24" ry="16" fill="url(#gRosa)" transform="rotate(58 36 70)"/>
+          <ellipse cx="28" cy="42" rx="24" ry="16" fill="url(#gRosa2)" transform="rotate(-65 28 42)"/>
+        </g>
+        <circle cx="50" cy="50" r="19" fill="url(#gRosa)"/>
+        <g fill="none" stroke="#c07a8c" stroke-width="1.8" opacity=".5" stroke-linecap="round">
+          <path d="M38 52 C 38 40, 48 34, 58 38"/>
+          <path d="M44 58 C 42 48, 50 42, 58 46"/>
+          <path d="M50 60 C 46 54, 50 48, 56 52"/>
+        </g>
+      </g>
+    </symbol>
+
+    <symbol id="ramo" viewBox="0 0 240 240">
+      <!-- hojas -->
+      <g filter="url(#acuarela)" opacity=".8">
+        <ellipse cx="58" cy="156" rx="42" ry="13" fill="url(#gHoja)" transform="rotate(-40 58 156)"/>
+        <ellipse cx="154" cy="152" rx="36" ry="11" fill="url(#gHoja2)" transform="rotate(30 154 152)"/>
+        <ellipse cx="182" cy="94" rx="32" ry="10" fill="url(#gHoja)" transform="rotate(-16 182 94)"/>
+        <ellipse cx="38" cy="82" rx="30" ry="10" fill="url(#gHoja2)" transform="rotate(26 38 82)"/>
+        <ellipse cx="110" cy="192" rx="26" ry="8" fill="url(#gHoja)" transform="rotate(74 110 192)"/>
+        <ellipse cx="200" cy="146" rx="24" ry="8" fill="url(#gHoja2)" transform="rotate(54 200 146)"/>
+        <ellipse cx="86" cy="30" rx="24" ry="8" fill="url(#gHoja2)" transform="rotate(-24 86 30)"/>
+      </g>
+      <!-- tallos -->
+      <g stroke="#9aa894" stroke-width="1.4" fill="none" opacity=".5" filter="url(#acuarela)">
+        <path d="M104 118 C 92 148, 78 168, 62 188"/>
+        <path d="M128 116 C 144 142, 162 158, 182 170"/>
+        <path d="M116 122 C 116 152, 112 172, 110 194"/>
+      </g>
+      <!-- rosas -->
+      <use href="#rosa" x="56" y="46" width="84" height="84"/>
+      <use href="#rosa" x="126" y="84" width="58" height="58" opacity=".95"/>
+      <use href="#rosa" x="38" y="100" width="42" height="42" opacity=".9"/>
+      <use href="#rosa" x="116" y="34" width="34" height="34" opacity=".85"/>
+      <use href="#rosa" x="168" y="112" width="28" height="28" opacity=".8"/>
+      <!-- flores sueltas -->
+      <g fill="#e9b9c4" opacity=".55" filter="url(#acuarela)">
+        <circle cx="190" cy="66" r="5"/><circle cx="202" cy="80" r="3.5"/><circle cx="40" cy="56" r="4"/>
+        <circle cx="66" cy="36" r="3"/><circle cx="146" cy="188" r="4"/><circle cx="24" cy="128" r="3"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
 <main class="scroll" id="scroll">
 
-  <!-- ============ 1 · HERO ============ -->
-  <section id="hero">
-    <div class="foto-hero rv on">
+  <!-- ============ 1 · PORTADA ============ -->
+  <section id="portada">
+    <svg class="ramo ar-sd" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ar-id" aria-hidden="true"><use href="#ramo"/></svg>
+
+    <div class="monograma rv on" style="margin-top:.4rem">
+      <span>P</span><i></i><span>M</span>
+    </div>
+    <p class="rotulo rv on" style="margin-top:.9rem">¡Nos casamos!</p>
+
+    <div class="foto foto-hero rv on" style="margin:1.4rem 0 1.5rem">
       <img src="img/hero.jpg" alt="Patricio y Maite" fetchpriority="high">
     </div>
 
-    <div class="hero-txt">
-      <h1 class="nombres rv">Patricio<span class="amp">&amp;</span>Maite</h1>
+    <h1 class="nombres rv">Patricio<span class="amp">&amp;</span>Maite</h1>
 
-      <div class="filete rv" style="margin:.9rem auto"><span>&#10086;</span></div>
+    <div class="filete rv"><span></span></div>
 
-      <p class="kicker rv">Te invitamos a nuestra boda</p>
+    <p class="rotulo rv">Te invitamos a nuestra boda</p>
+    <p class="invitado rv" id="invitado">&nbsp;</p>
+    <p class="parrafo rv">Nos encantaría celebrar<br>este día tan especial junto a ti.</p>
 
-      <p class="invita rv" style="margin-top:1rem">Querid@</p>
-      <p class="invitado rv" id="invitado">&nbsp;</p>
-      <p class="mensaje rv">Nos encantaría celebrar<br>este día tan especial junto a ti</p>
-
-      <div class="fecha rv">
-        <span class="lado">Sábado</span>
-        <span class="barra"></span>
-        <span class="centro">
-          <span class="num">10</span>
-          <span class="anio" style="display:block">Octubre 2026</span>
+    <p class="parrafo rv" style="margin-top:1.5rem;font-style:italic">Dale play a nuestra canción</p>
+    <div class="musica rv" id="musica" data-sonando="0">
+      <!-- La API de Spotify reemplaza el nodo interior por su iframe,
+           por eso quien posiciona es el contenedor padre. -->
+      <div class="musica-oculta" aria-hidden="true"><div id="spotify-host"></div></div>
+      <div class="musica-tapa" aria-hidden="true"></div>
+      <button class="musica-btn" id="musica-btn" disabled aria-label="Reproducir Your Song de Elton John">
+        <span class="raya" aria-hidden="true"></span>
+        <span class="disco" aria-hidden="true">
+          <svg class="p-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+          <svg class="p-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
         </span>
-        <span class="barra"></span>
-        <span class="lado">17:30 hrs</span>
-      </div>
+        <span class="ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="raya" aria-hidden="true"></span>
+      </button>
+    </div>
 
-      <div class="contador rv" id="contador">
-        <div><b id="c-d">—</b><small>Días</small></div>
-        <div><b id="c-h">—</b><small>Horas</small></div>
-        <div><b id="c-m">—</b><small>Min</small></div>
-        <div><b id="c-s">—</b><small>Seg</small></div>
+    <div class="fecha rv" style="margin-top:1.2rem">
+      <div class="caja">Sábado</div>
+      <div class="col">
+        <span class="mes">Octubre</span>
+        <span class="num">10</span>
       </div>
-
-      <div class="musica rv" id="musica" data-sonando="0">
-        <!-- La API de Spotify reemplaza el nodo interior por su iframe,
-             por eso quien posiciona es el contenedor padre. -->
-        <div class="musica-oculta" aria-hidden="true"><div id="spotify-host"></div></div>
-        <div class="musica-tapa" aria-hidden="true"></div>
-        <button class="musica-btn" id="musica-btn" disabled aria-label="Reproducir Your Song de Elton John">
-          <span class="disco" aria-hidden="true">
-            <svg class="p-play" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
-            <svg class="p-pause" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-          </span>
-          <span class="tx">
-            <b>Your Song <span class="ondas" aria-hidden="true"><i></i><i></i><i></i><i></i></span></b>
-            <small>Elton John · nuestra canción</small>
-          </span>
-        </button>
-      </div>
+      <div class="caja">2026</div>
+    </div>
+    <p class="rotulo rv" style="margin-top:1.4rem">Faltan</p>
+    <div class="contador rv" id="contador" style="margin-top:.5rem">
+      <span class="u"><b id="c-d">—</b><small>Días</small></span>
+      <span class="sep">:</span>
+      <span class="u"><b id="c-h">—</b><small>Horas</small></span>
+      <span class="sep">:</span>
+      <span class="u"><b id="c-m">—</b><small>Min</small></span>
+      <span class="sep">:</span>
+      <span class="u"><b id="c-s">—</b><small>Seg</small></span>
     </div>
 
     <div class="flecha" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </section>
 
-  <!-- ============ 2 · INFO ============ -->
+  <!-- ============ 2 · INFORMACIÓN ============ -->
   <section id="info">
-    <p class="kicker rv">Información</p>
-    <h2 class="titulo-sec rv" style="margin-top:.6rem">Todo lo que necesitas</h2>
-    <div class="filete rv"><span>&#10086;</span></div>
+    <svg class="ramo ar-si" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ar-ii" aria-hidden="true"><use href="#ramo"/></svg>
 
-    <div class="tarjetas">
-      <a class="tarjeta rv" id="link-rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform" target="_blank" rel="noopener">
-        <span class="ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </span>
-        <span class="cuerpo">
-          <h3>Confirma tu asistencia</h3>
-          <p>Completa el formulario para reservar tu lugar.</p>
-        </span>
-        <span class="go" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </span>
-      </a>
+    <p class="rotulo rv" style="margin-top:1rem">Información</p>
+    <div class="filete rv"><span></span></div>
 
-      <a class="tarjeta rv" href="https://www.google.com/maps/place/San+Miguel+de+Tango,Lonqu%C3%A9n+Sur/@-33.6542824,-70.828958,17z/data=!3m1!4b1!4m6!3m5!1s0x9662de126f63a1b1:0xdd698f0975af9c69!8m2!3d-33.6542824!4d-70.828958!16s%2Fg%2F11bx1scz_6" target="_blank" rel="noopener">
-        <span class="ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        </span>
-        <span class="cuerpo">
-          <h3>San Miguel de Tango</h3>
-          <p>Av. Lonquén Sur, Paradero 26 ½, Calera de Tango. Toca para llegar.</p>
-        </span>
-        <span class="go" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </span>
-      </a>
+    <div class="bloque rv" style="margin-top:.6rem">
+      <div class="ico" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <h3>La Ceremonia</h3>
+      <p class="sub">17:30 hrs · San Miguel de Tango<br>Av. Lonquén Sur, Paradero 26 ½<br>Calera de Tango</p>
+      <a class="pill" href="https://www.google.com/maps/place/San+Miguel+de+Tango,Lonqu%C3%A9n+Sur/@-33.6542824,-70.828958,17z/data=!3m1!4b1!4m6!3m5!1s0x9662de126f63a1b1:0xdd698f0975af9c69!8m2!3d-33.6542824!4d-70.828958!16s%2Fg%2F11bx1scz_6" target="_blank" rel="noopener">Ver ubicación</a>
+    </div>
 
-      <a class="tarjeta rv" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">
-        <span class="ico" aria-hidden="true">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-        </span>
-        <span class="cuerpo">
-          <h3>Lista de novios</h3>
-          <p>Tu presencia es nuestro regalo. Si quieres, aquí está la lista.</p>
-        </span>
-        <span class="go" aria-hidden="true">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </span>
-      </a>
+    <div class="separador rv"></div>
+
+    <div class="bloque rv">
+      <div class="ico" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 6 10-6"/></svg>
+      </div>
+      <h3>Confirmar asistencia</h3>
+      <p class="sub">Agradecemos que confirmes tu asistencia para reservar tu lugar.</p>
+      <a class="pill" id="link-rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform" target="_blank" rel="noopener">Confirmar aquí</a>
+    </div>
+
+    <div class="separador rv"></div>
+
+    <div class="bloque rv">
+      <div class="ico" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      </div>
+      <h3>Sugerencia de regalos</h3>
+      <p class="sub">El mejor regalo es tu presencia. Pero si deseas tener un detalle con nosotros, te dejamos nuestra lista.</p>
+      <a class="pill" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">Lista de novios</a>
     </div>
 
     <div class="flecha" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </section>
 
-  <!-- ============ 3 · OTROS ============ -->
-  <section id="otros">
-    <p class="kicker rv">Antes de la fiesta</p>
-    <div class="filete rv"><span>&#10086;</span></div>
+  <!-- ============ 3 · DETALLES ============ -->
+  <section id="detalles">
+    <svg class="ramo ar-sd" aria-hidden="true"><use href="#ramo"/></svg>
 
-    <div class="detalles">
-      <div class="detalle rv">
-        <h3>Código de vestimenta</h3>
-        <p><strong>Formal.</strong><br>El color blanco está reservado para la novia.</p>
+    <div class="detalle rv" style="margin-top:1rem">
+      <div class="ico" aria-hidden="true">
+        <svg width="46" height="34" viewBox="0 0 60 44" fill="currentColor" opacity=".85">
+          <path d="M20 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM12.5 14h7c1.4 0 2.5 1.1 2.5 2.5V27h-2.6v15h-6.8V27H10V16.5c0-1.4 1.1-2.5 2.5-2.5z"/>
+          <path d="M46 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM42 14c1.6 0 3 1 3.6 2.5L50 29l-2.6 1-2.4-6.6V42h-3.3v-11h-1.4v11H37V23.4L34.6 30 32 29l4.4-12.5C37 15 38.4 14 40 14h2z"/>
+        </svg>
       </div>
-      <div class="detalle rv">
-        <h3>Sin niños</h3>
-        <p>Un evento para adultos lleno de diversión:<br>dejamos a los niños en casa esta vez.</p>
-      </div>
+      <h3>Código de vestimenta</h3>
+      <p><strong>Formal.</strong><br>El color blanco está reservado para la novia.</p>
     </div>
 
-    <p class="cierre rv">Esperamos que puedas acompañarnos.</p>
+    <div class="separador rv"></div>
 
-    <div class="foto-final rv">
+    <div class="detalle rv">
+      <div class="ico" aria-hidden="true">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h3>Sin niños</h3>
+      <p>Un evento para adultos lleno de diversión: dejamos a los niños en casa esta vez.</p>
+    </div>
+
+    <div class="separador rv"></div>
+
+    <p class="parrafo rv" style="font-style:italic">Esperamos que puedas acompañarnos.</p>
+    <p class="gracias rv">¡Muchas gracias!</p>
+
+    <div class="foto foto-final rv" style="margin-top:1.6rem">
       <img src="img/final.jpg" alt="Patricio y Maite" loading="lazy">
     </div>
 
-    <p class="firma rv">Patricio &amp; Maite</p>
-    <p class="pie rv">10 · 10 · 2026</p>
+    <div class="monograma rv" style="margin-top:1.6rem;font-size:1.6rem">
+      <span>P</span><i style="height:1.3rem"></i><span>M</span>
+    </div>
+    <p class="rotulo rv" style="margin-top:.5rem;opacity:.75">10 · 10 · 2026</p>
   </section>
 
 </main>
@@ -386,18 +445,15 @@
   var nombre = (params.get('nombre') || '').trim();
 
   // Nombre del invitado (sanitizado vía textContent)
-  var el = document.getElementById('invitado');
-  el.textContent = nombre ? nombre : 'Familia y amigos';
+  document.getElementById('invitado').textContent = nombre ? nombre : 'Familia y amigos';
 
   // Precarga del formulario con el nombre del invitado
   var rsvp = document.getElementById('link-rsvp');
   var base = 'https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform';
   if (nombre) {
     rsvp.href = base + '?usp=pp_url&entry.1216997967=' + encodeURIComponent(nombre);
+    document.title = nombre + ' · Patricio & Maite';
   }
-
-  // Título de la pestaña
-  if (nombre) document.title = nombre + ' · Patricio & Maite';
 
   // ---------- Contador ----------
   // 10 de octubre de 2026, 17:30 hrs — Chile continental (UTC-3)
@@ -409,7 +465,7 @@
     var falta = boda - Date.now();
     if (falta <= 0) {
       document.getElementById('contador').innerHTML =
-        '<div style="min-width:auto"><b style="font-size:1.6rem">¡Hoy nos casamos!</b></div>';
+        '<span class="u" style="min-width:auto"><b style="font-size:1.5rem">¡Hoy nos casamos!</b></span>';
       clearInterval(timer);
       return;
     }
@@ -422,9 +478,7 @@
   tick();
   var timer = setInterval(tick, 1000);
 
-  // ---------- Música: botón propio sobre el reproductor oculto de Spotify ----------
-  // Se usa la IFrame API de Spotify: el reproductor sigue existiendo (es quien
-  // reproduce), pero la UI visible es el botón de arriba.
+  // ---------- Música ----------
   var musica = document.getElementById('musica'),
       btn = document.getElementById('musica-btn');
   var ctrl = null;
@@ -437,9 +491,9 @@
         ctrl = controller;
         btn.disabled = false;
         controller.addListener('playback_update', function(e){
-          musica.dataset.sonando = (e.data && !e.data.isPaused) ? '1' : '0';
-          btn.setAttribute('aria-label',
-            (e.data && !e.data.isPaused ? 'Pausar' : 'Reproducir') + ' Your Song de Elton John');
+          var sonando = e.data && !e.data.isPaused;
+          musica.dataset.sonando = sonando ? '1' : '0';
+          btn.setAttribute('aria-label', (sonando ? 'Pausar' : 'Reproducir') + ' Your Song de Elton John');
         });
       }
     );
@@ -447,32 +501,22 @@
 
   // Un único listener: si el reproductor cargó, controla; si no, abre Spotify.
   btn.addEventListener('click', function(){
-    if (ctrl) {
-      ctrl.togglePlay();
-    } else {
-      window.open('https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1', '_blank', 'noopener');
-    }
+    if (ctrl) ctrl.togglePlay();
+    else window.open('https://open.spotify.com/track/38zsOOcu31XbbYj9BIPUF1', '_blank', 'noopener');
   });
-
-  // Si Spotify no cargó (bloqueado, sin red), igual se habilita el botón
-  // para que al menos abra la canción en Spotify.
   setTimeout(function(){ btn.disabled = false; }, 6000);
 
-  // ---------- Reveal on scroll ----------
+  // ---------- Reveal ----------
   var io = new IntersectionObserver(function(entradas){
     entradas.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
-  }, { threshold: .18 });
+  }, { threshold: .15 });
+  document.querySelectorAll('.rv').forEach(function(n){ io.observe(n); });
 
-  document.querySelectorAll('.rv').forEach(function(n, i){
-    n.style.transitionDelay = (Math.min(i, 6) * 90) + 'ms';
-    io.observe(n);
-  });
-
-  // La flecha del hero desaparece al bajar
+  // La flecha de la portada desaparece al bajar
   var scroll = document.getElementById('scroll');
   scroll.addEventListener('scroll', function(){
-    var f = document.querySelector('#hero .flecha');
-    if (f) f.style.opacity = scroll.scrollTop > 60 ? '0' : '.75';
+    var f = document.querySelector('#portada .flecha');
+    if (f) f.style.opacity = scroll.scrollTop > 60 ? '0' : '1';
   }, { passive: true });
 })();
 </script>
