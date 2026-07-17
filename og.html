@@ -5,10 +5,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@400;500&family=Parisienne&display=swap" rel="stylesheet">
 <style>
   :root{
-    --papel:#fbf7f5; --papel-2:#f7edeb;
-    --tinta:#4b3f41; --tinta-suave:#8d7c7f;
-    --rosa:#d38b9b; --rosa-med:#e5adb8; --rosa-suave:#f0cdd4;
-    --linea:rgba(150,120,125,.30);
+    --papel:#f3eee3;
+    --tinta:#4a453b; --tinta-suave:#8b8375;
+    --salvia:#8c9a76; --salvia-med:#a7b291; --salvia-suave:#d3dac5;
+    --linea:rgba(120,110,92,.34);
     --sans:'Jost',sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -19,89 +19,38 @@
     display:flex;overflow:hidden;position:relative;
     -webkit-font-smoothing:antialiased;
   }
-  /* textura de papel sutil */
+  /* textura de papel */
   body::after{
     content:"";position:absolute;inset:0;z-index:5;pointer-events:none;
-    mix-blend-mode:multiply;opacity:.45;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+    mix-blend-mode:multiply;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
   }
 
-  /* ---------- texto ---------- */
   .txt{
     width:640px;height:100%;flex:0 0 640px;
     display:flex;flex-direction:column;justify-content:center;
-    padding:0 68px;position:relative;z-index:2;
+    padding:0 70px;position:relative;z-index:2;
   }
-  .mono{display:flex;align-items:center;gap:16px;font-size:34px;font-weight:400;letter-spacing:.06em;line-height:1;color:var(--tinta)}
-  .mono i{width:1px;height:30px;background:var(--linea)}
-  .nombres{font-family:'Parisienne',cursive;font-size:92px;line-height:.95;margin:26px 0 4px}
-  .nombres .amp{color:var(--rosa);font-size:.55em;margin:0 6px}
+  .mono{display:flex;align-items:center;gap:16px;font-size:33px;font-weight:400;letter-spacing:.06em;line-height:1;color:var(--tinta)}
+  .mono i{width:1px;height:29px;background:var(--linea)}
+  .nombres{font-family:'Parisienne',cursive;font-size:92px;line-height:.95;margin:24px 0 4px;color:var(--tinta)}
+  .nombres .amp{color:var(--salvia);font-size:.55em;margin:0 6px}
   .filete{display:flex;align-items:center;gap:12px;width:190px;margin:16px 0 20px}
   .filete::before,.filete::after{content:"";height:1px;flex:1;background:var(--linea)}
-  .filete span{width:6px;height:6px;border-radius:50%;background:var(--rosa-med)}
+  .filete span{width:6px;height:6px;border-radius:50%;background:var(--salvia-med)}
   .invita{font-family:var(--sans);font-size:19px;font-weight:400;letter-spacing:.34em;text-transform:uppercase;color:var(--tinta-suave)}
   .dia{font-size:38px;font-weight:500;margin-top:26px;line-height:1.15}
-  .dia b{color:var(--rosa);font-weight:600}
+  .dia b{color:var(--salvia);font-weight:600}
   .hora{font-family:var(--sans);font-size:27px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);margin-top:14px;display:inline-flex;align-items:center;gap:16px}
   .hora::before,.hora::after{content:"";width:34px;height:1px;background:var(--linea)}
 
-  /* ---------- foto ---------- */
   .foto{flex:1;height:100%;position:relative;overflow:hidden}
-  .foto img{width:100%;height:100%;object-fit:cover;object-position:center 60%}
-  /* difuminado del borde izquierdo de la foto hacia el papel */
+  .foto img{width:100%;height:100%;object-fit:cover;object-position:center 58%}
   .foto::before{content:"";position:absolute;inset:0;z-index:1;
-    background:linear-gradient(90deg,var(--papel) 0%,rgba(251,247,245,.35) 12%,transparent 32%)}
-
-  /* rosa decorativa esquina superior */
-  .ramo{position:absolute;top:-70px;left:-70px;width:300px;height:300px;z-index:3;opacity:.9;transform:rotate(6deg)}
-  .ramo-b{position:absolute;bottom:-90px;left:400px;width:260px;height:260px;z-index:3;opacity:.85;transform:scaleY(-1) rotate(-8deg)}
+    background:linear-gradient(90deg,var(--papel) 0%,rgba(243,238,227,.35) 12%,transparent 32%)}
 </style>
 </head>
 <body>
-
-<svg width="0" height="0" style="position:absolute">
-  <defs>
-    <filter id="acuarela" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="2.4"/></filter>
-    <filter id="acuarelaSuave" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="4.5"/></filter>
-    <radialGradient id="gRosa" cx="38%" cy="34%" r="72%"><stop offset="0%" stop-color="#fbe4e9"/><stop offset="55%" stop-color="#eeb7c3"/><stop offset="100%" stop-color="#d98d9f"/></radialGradient>
-    <radialGradient id="gRosa2" cx="42%" cy="38%" r="70%"><stop offset="0%" stop-color="#fdeff2"/><stop offset="60%" stop-color="#f4cbd4"/><stop offset="100%" stop-color="#e3a3b1"/></radialGradient>
-    <linearGradient id="gHoja" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c3cdbc"/><stop offset="100%" stop-color="#93a38d"/></linearGradient>
-    <linearGradient id="gHoja2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dfe4d9"/><stop offset="100%" stop-color="#adb9a6"/></linearGradient>
-    <symbol id="rosa" viewBox="0 0 100 100">
-      <g filter="url(#acuarelaSuave)" opacity=".5"><circle cx="50" cy="50" r="42" fill="url(#gRosa2)"/></g>
-      <g filter="url(#acuarela)">
-        <g opacity=".9">
-          <ellipse cx="50" cy="27" rx="24" ry="16" fill="url(#gRosa2)"/>
-          <ellipse cx="72" cy="42" rx="24" ry="16" fill="url(#gRosa)" transform="rotate(65 72 42)"/>
-          <ellipse cx="64" cy="70" rx="24" ry="16" fill="url(#gRosa2)" transform="rotate(-58 64 70)"/>
-          <ellipse cx="36" cy="70" rx="24" ry="16" fill="url(#gRosa)" transform="rotate(58 36 70)"/>
-          <ellipse cx="28" cy="42" rx="24" ry="16" fill="url(#gRosa2)" transform="rotate(-65 28 42)"/>
-        </g>
-        <circle cx="50" cy="50" r="19" fill="url(#gRosa)"/>
-        <g fill="none" stroke="#c07a8c" stroke-width="1.8" opacity=".5" stroke-linecap="round">
-          <path d="M38 52 C 38 40, 48 34, 58 38"/><path d="M44 58 C 42 48, 50 42, 58 46"/><path d="M50 60 C 46 54, 50 48, 56 52"/>
-        </g>
-      </g>
-    </symbol>
-    <symbol id="ramo" viewBox="0 0 240 240">
-      <g filter="url(#acuarela)" opacity=".8">
-        <ellipse cx="58" cy="156" rx="42" ry="13" fill="url(#gHoja)" transform="rotate(-40 58 156)"/>
-        <ellipse cx="154" cy="152" rx="36" ry="11" fill="url(#gHoja2)" transform="rotate(30 154 152)"/>
-        <ellipse cx="182" cy="94" rx="32" ry="10" fill="url(#gHoja)" transform="rotate(-16 182 94)"/>
-        <ellipse cx="38" cy="82" rx="30" ry="10" fill="url(#gHoja2)" transform="rotate(26 38 82)"/>
-        <ellipse cx="110" cy="192" rx="26" ry="8" fill="url(#gHoja)" transform="rotate(74 110 192)"/>
-      </g>
-      <use href="#rosa" x="56" y="46" width="84" height="84"/>
-      <use href="#rosa" x="126" y="84" width="58" height="58" opacity=".95"/>
-      <use href="#rosa" x="38" y="100" width="42" height="42" opacity=".9"/>
-      <use href="#rosa" x="116" y="34" width="34" height="34" opacity=".85"/>
-      <use href="#rosa" x="168" y="112" width="28" height="28" opacity=".8"/>
-    </symbol>
-  </defs>
-</svg>
-
-<svg class="ramo" aria-hidden="true"><use href="#ramo"/></svg>
-<svg class="ramo-b" aria-hidden="true"><use href="#ramo"/></svg>
 
 <div class="txt">
   <div class="mono"><span>P</span><i></i><span>M</span></div>
