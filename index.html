@@ -212,9 +212,14 @@
   .card .body{display:flex;flex-direction:column;align-items:center}
   .card .h3{font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta)}
   .card .sub{font-size:.98rem;color:var(--tinta-suave);line-height:1.45;font-style:italic;margin-top:.28rem;max-width:17rem}
-  .card .cta{display:inline-flex;align-items:center;gap:.35rem;margin-top:.65rem;
-    font-family:var(--sans);font-size:.62rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--salvia)}
+  /* CTA como botón sólido para que resalte como acción principal. */
+  .card .cta{display:inline-flex;align-items:center;gap:.45rem;margin-top:.9rem;
+    background:var(--salvia);color:#fff;padding:.55rem 1.25rem;border-radius:2rem;
+    font-family:var(--sans);font-size:.62rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+    box-shadow:0 8px 16px -8px rgba(140,154,118,.95);
+    transition:background .3s ease,transform .3s ease,box-shadow .3s ease}
   .card .cta svg{transition:transform .3s ease}
+  .card:hover .cta{background:#7c8a67;transform:translateY(-1px);box-shadow:0 11px 20px -8px rgba(124,138,103,1)}
   .card:hover .cta svg{transform:translateX(3px)}
 
   /* Iconos animados (línea, tono salvia) — movimiento sutil en bucle. */
@@ -232,17 +237,37 @@
   @keyframes checkPop{0%,55%{transform:scale(1)}63%{transform:scale(1.09)}72%,100%{transform:scale(1)}}
   @keyframes drawRing{0%{stroke-dashoffset:120}35%,100%{stroke-dashoffset:0}}
   @keyframes drawTick{0%,30%{stroke-dashoffset:30}55%,100%{stroke-dashoffset:0}}
-  /* regalo: la tapa salta con rebote y aparece un destello */
-  .ic-gift .lid{animation:lidPop 2.8s ease-in-out infinite;transform-origin:22px 17px}
-  .ic-gift .bow{animation:bowPop 2.8s ease-in-out infinite;transform-origin:22px 13px}
-  .ic-gift .spark{stroke:var(--salvia-med);opacity:0;transform-origin:33px 13px;animation:spark 2.8s ease-in-out infinite}
-  @keyframes lidPop{0%,45%{transform:translateY(0) rotate(0)}55%{transform:translateY(-4px) rotate(-5deg)}66%{transform:translateY(-2px) rotate(3deg)}76%,100%{transform:translateY(0) rotate(0)}}
-  @keyframes bowPop{0%,45%{transform:scale(1)}55%{transform:scale(1.12)}76%,100%{transform:scale(1)}}
-  @keyframes spark{0%,50%{opacity:0;transform:scale(0)}61%{opacity:1;transform:scale(1)}78%,100%{opacity:0;transform:scale(.6)}}
+  /* regalo → corazón: la tapa se abre, la caja se desvanece y sale un corazón */
+  .ic-giftheart .gh-lid{animation:ghLid 3.6s ease-in-out infinite;transform-origin:22px 17px}
+  .ic-giftheart .gh-box{animation:ghBox 3.6s ease-in-out infinite;transform-origin:22px 27px}
+  .ic-giftheart .gh-heart{fill:var(--salvia);stroke:none;opacity:0;transform-origin:22px 23px;animation:ghHeart 3.6s ease-in-out infinite}
+  @keyframes ghLid{
+    0%,34%{transform:translateY(0) rotate(0);opacity:1}
+    46%{transform:translateY(-6px) rotate(-11deg);opacity:1}
+    56%{transform:translateY(-17px) rotate(-18deg);opacity:0}
+    90%{transform:translateY(-17px) rotate(-18deg);opacity:0}
+    98%,100%{transform:translateY(0) rotate(0);opacity:1}
+  }
+  @keyframes ghBox{
+    0%,42%{opacity:1;transform:scale(1)}
+    60%{opacity:0;transform:scale(.9)}
+    90%{opacity:0;transform:scale(.9)}
+    98%,100%{opacity:1;transform:scale(1)}
+  }
+  @keyframes ghHeart{
+    0%,48%{opacity:0;transform:translateY(5px) scale(.2)}
+    63%{opacity:1;transform:translateY(-1px) scale(1)}
+    71%{transform:translateY(-1px) scale(1.14)}
+    79%{transform:translateY(-1px) scale(1)}
+    87%{opacity:1}
+    93%,100%{opacity:0;transform:translateY(5px) scale(.2)}
+  }
   @media (prefers-reduced-motion:reduce){
     .ic *,.ic-check{animation:none!important}
     .ic-check .ring,.ic-check .tick{stroke-dashoffset:0}
-    .ic-gift .spark,.ic-pin .ripple{opacity:0}
+    .ic-pin .ripple{opacity:0}
+    .ic-giftheart .gh-heart{opacity:0}
+    .ic-giftheart .gh-lid,.ic-giftheart .gh-box{opacity:1;transform:none}
   }
   .separador{width:100%;max-width:16rem;height:1px;background:var(--linea);margin:1.45rem auto;opacity:.7}
 
@@ -364,12 +389,16 @@
 
       <a class="card rv" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">
         <span class="chip" aria-hidden="true">
-          <svg class="ic ic-gift" viewBox="0 0 44 44">
-            <path class="spark" d="M33 10.5v5M30.5 13h5"/>
-            <g class="lid"><rect x="9" y="14" width="26" height="6.5" rx="1.6"/></g>
-            <path d="M11.5 20.5V33a1.6 1.6 0 0 0 1.6 1.6h17.8a1.6 1.6 0 0 0 1.6-1.6V20.5"/>
-            <path d="M22 14v20.6"/>
-            <path class="bow" d="M22 14c-4.5-6-10.5-2.5-4.8 2M22 14c4.5-6 10.5-2.5 4.8 2"/>
+          <svg class="ic ic-giftheart" viewBox="0 0 44 44">
+            <g class="gh-box">
+              <path d="M11.5 20.5V33a1.6 1.6 0 0 0 1.6 1.6h17.8a1.6 1.6 0 0 0 1.6-1.6V20.5"/>
+              <path d="M22 20.5v14.1"/>
+            </g>
+            <g class="gh-lid">
+              <rect x="9" y="14" width="26" height="6.5" rx="1.6"/>
+              <path class="bow" d="M22 14c-4.5-6-10.5-2.5-4.8 2M22 14c4.5-6 10.5-2.5 4.8 2"/>
+            </g>
+            <path class="gh-heart" d="M22 29.6C12 22 15 14.4 20 16.8 21.2 17.4 22 18.7 22 18.7 22 18.7 22.8 17.4 24 16.8 29 14.4 32 22 22 29.6Z"/>
           </svg>
         </span>
         <span class="body">
