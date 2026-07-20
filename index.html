@@ -187,46 +187,55 @@
   .time{flex:0 0 auto;font-family:var(--sans);font-size:.6rem;color:var(--tinta-suave);font-variant-numeric:tabular-nums;letter-spacing:.01em}
   .vol{flex:0 0 auto;color:var(--tinta-suave);display:flex;opacity:.7}
 
-  /* ---------- 2 · bloques de información ---------- */
-  .bloque{max-width:23rem;margin-inline:auto}
-  .bloque .ico{margin-bottom:.55rem;display:flex;justify-content:center}
-  .bloque h3{font-family:var(--sans);font-size:.82rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase}
-  .bloque .sub{font-size:.95rem;color:var(--tinta-suave);line-height:1.6;margin-top:.35rem;font-style:italic}
+  /* ---------- 2 · información (tres tarjetas) ---------- */
+  .cards{display:flex;flex-direction:column;gap:.85rem;width:100%;max-width:21rem;margin-top:1.1rem}
+  .card{
+    display:flex;align-items:center;gap:.95rem;text-align:left;
+    background:#fcfaf4;border:1px solid var(--linea);border-radius:1.15rem;
+    box-shadow:0 12px 26px -20px rgba(74,69,59,.6);
+    padding:.85rem .95rem;text-decoration:none;color:inherit;
+    transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:0 18px 32px -18px rgba(74,69,59,.7);border-color:var(--salvia-med)}
+  .card .chip{
+    flex:0 0 auto;width:3.15rem;height:3.15rem;border-radius:.9rem;
+    background:var(--salvia-panel);display:grid;place-items:center;
+  }
+  .card .body{flex:1;min-width:0;display:flex;flex-direction:column}
+  .card .h3{font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--tinta)}
+  .card .sub{font-size:.9rem;color:var(--tinta-suave);line-height:1.35;font-style:italic;margin-top:.12rem}
+  .card .cta{display:inline-flex;align-items:center;gap:.3rem;margin-top:.4rem;
+    font-family:var(--sans);font-size:.58rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--salvia)}
+  .card .cta svg{transition:transform .3s ease}
+  .card:hover .cta svg{transform:translateX(3px)}
 
-  /* Iconos animados (línea, tono salvia) — el movimiento es sutil y en bucle. */
-  .ic{width:44px;height:44px;fill:none;stroke:var(--salvia);stroke-width:1.6;
+  /* Iconos animados (línea, tono salvia) — movimiento sutil en bucle. */
+  .ic{width:34px;height:34px;fill:none;stroke:var(--salvia);stroke-width:1.7;
       stroke-linecap:round;stroke-linejoin:round}
-  .ic .solid{fill:var(--salvia);stroke:none}
-  .ic-pin .pin-body{animation:bob 2.6s ease-in-out infinite;transform-origin:22px 30px}
-  .ic-pin .pin-shadow{fill:var(--salvia);stroke:none;animation:shadowPulse 2.6s ease-in-out infinite;transform-origin:22px 37px}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-  @keyframes shadowPulse{0%,100%{transform:scaleX(1);opacity:.45}50%{transform:scaleX(.65);opacity:.28}}
+  /* ubicación: el pin cae y rebota, con onda en la base */
+  .ic-pin .pin-body{animation:pinDrop 2.8s ease-in-out infinite;transform-origin:22px 30px}
+  .ic-pin .ripple{fill:var(--salvia);stroke:none;transform-origin:22px 35px;animation:ripple 2.8s ease-out infinite}
+  @keyframes pinDrop{0%{transform:translateY(-7px)}12%{transform:translateY(0)}20%{transform:translateY(-3px)}28%,100%{transform:translateY(0)}}
+  @keyframes ripple{0%,28%{transform:scale(.4);opacity:0}36%{opacity:.5}72%,100%{transform:scale(1.3);opacity:0}}
+  /* confirmación: se dibuja el check y da un pequeño pop */
+  .ic-check{animation:checkPop 2.8s ease-in-out infinite;transform-origin:22px 22px}
   .ic-check .ring{stroke-dasharray:120;stroke-dashoffset:120;animation:drawRing 2.8s ease-in-out infinite}
   .ic-check .tick{stroke-dasharray:30;stroke-dashoffset:30;animation:drawTick 2.8s ease-in-out infinite}
+  @keyframes checkPop{0%,55%{transform:scale(1)}63%{transform:scale(1.09)}72%,100%{transform:scale(1)}}
   @keyframes drawRing{0%{stroke-dashoffset:120}35%,100%{stroke-dashoffset:0}}
   @keyframes drawTick{0%,30%{stroke-dashoffset:30}55%,100%{stroke-dashoffset:0}}
-  .ic-gift .lid{animation:lidLift 2.8s ease-in-out infinite;transform-origin:22px 17px}
-  .ic-gift .bow{animation:bowPulse 2.8s ease-in-out infinite;transform-origin:22px 14px}
-  @keyframes lidLift{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2.5px) rotate(-4deg)}}
-  @keyframes bowPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+  /* regalo: la tapa salta con rebote y aparece un destello */
+  .ic-gift .lid{animation:lidPop 2.8s ease-in-out infinite;transform-origin:22px 17px}
+  .ic-gift .bow{animation:bowPop 2.8s ease-in-out infinite;transform-origin:22px 13px}
+  .ic-gift .spark{stroke:var(--salvia-med);opacity:0;transform-origin:33px 13px;animation:spark 2.8s ease-in-out infinite}
+  @keyframes lidPop{0%,45%{transform:translateY(0) rotate(0)}55%{transform:translateY(-4px) rotate(-5deg)}66%{transform:translateY(-2px) rotate(3deg)}76%,100%{transform:translateY(0) rotate(0)}}
+  @keyframes bowPop{0%,45%{transform:scale(1)}55%{transform:scale(1.12)}76%,100%{transform:scale(1)}}
+  @keyframes spark{0%,50%{opacity:0;transform:scale(0)}61%{opacity:1;transform:scale(1)}78%,100%{opacity:0;transform:scale(.6)}}
   @media (prefers-reduced-motion:reduce){
-    .ic-pin .pin-body,.ic-pin .pin-shadow,.ic-gift .lid,.ic-gift .bow{animation:none}
-    .ic-check .ring,.ic-check .tick{animation:none;stroke-dashoffset:0}
+    .ic *,.ic-check{animation:none!important}
+    .ic-check .ring,.ic-check .tick{stroke-dashoffset:0}
+    .ic-gift .spark,.ic-pin .ripple{opacity:0}
   }
-
-  .pill{
-    display:inline-flex;align-items:center;gap:.5rem;margin-top:.85rem;
-    background:transparent;
-    border:1px solid var(--salvia-med);
-    border-radius:2rem;
-    padding:.5rem 1.25rem;
-    font-family:var(--sans);font-size:.66rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;
-    color:#5f6a49;text-decoration:none;
-    transition:background .3s ease,color .3s ease,transform .3s ease;
-  }
-  .pill svg{transition:transform .3s ease}
-  .pill:hover{background:var(--salvia);color:#fff;transform:translateY(-1px)}
-  .pill:hover svg{transform:translateX(3px)}
   .separador{width:100%;max-width:16rem;height:1px;background:var(--linea);margin:1.45rem auto;opacity:.7}
 
   /* ---------- 3 · detalles ---------- */
@@ -309,49 +318,60 @@
     <p class="rotulo rv">Información</p>
     <div class="filete rv"><span></span></div>
 
-    <div class="bloque rv" style="margin-top:.6rem">
-      <div class="ico" aria-hidden="true">
-        <svg class="ic ic-pin" viewBox="0 0 44 44">
-          <ellipse class="pin-shadow" cx="22" cy="37" rx="7" ry="1.8"/>
-          <g class="pin-body">
-            <path d="M22 7a9.5 9.5 0 0 1 9.5 9.5c0 6.5-9.5 15.5-9.5 15.5s-9.5-9-9.5-15.5A9.5 9.5 0 0 1 22 7z"/>
-            <circle cx="22" cy="16.5" r="3.4"/>
-          </g>
-        </svg>
-      </div>
-      <h3>La Ceremonia</h3>
-      <p class="sub">17:30 hrs · San Miguel de Tango<br>Av. Lonquén Sur, Paradero 26 ½<br>Calera de Tango</p>
-      <a class="pill" href="https://www.google.com/maps/place/San+Miguel+de+Tango,Lonqu%C3%A9n+Sur/@-33.6542824,-70.828958,17z/data=!3m1!4b1!4m6!3m5!1s0x9662de126f63a1b1:0xdd698f0975af9c69!8m2!3d-33.6542824!4d-70.828958!16s%2Fg%2F11bx1scz_6" target="_blank" rel="noopener">Ver ubicación</a>
-    </div>
+    <div class="cards">
+      <a class="card rv" href="https://www.google.com/maps/place/San+Miguel+de+Tango,Lonqu%C3%A9n+Sur/@-33.6542824,-70.828958,17z/data=!3m1!4b1!4m6!3m5!1s0x9662de126f63a1b1:0xdd698f0975af9c69!8m2!3d-33.6542824!4d-70.828958!16s%2Fg%2F11bx1scz_6" target="_blank" rel="noopener">
+        <span class="chip" aria-hidden="true">
+          <svg class="ic ic-pin" viewBox="0 0 44 44">
+            <ellipse class="ripple" cx="22" cy="35" rx="8" ry="2.4"/>
+            <g class="pin-body">
+              <path d="M22 8a8.5 8.5 0 0 1 8.5 8.5c0 6-8.5 14-8.5 14s-8.5-8-8.5-14A8.5 8.5 0 0 1 22 8z"/>
+              <circle cx="22" cy="16.5" r="3"/>
+            </g>
+          </svg>
+        </span>
+        <span class="body">
+          <span class="h3">La Ceremonia</span>
+          <span class="sub">San Miguel de Tango · Calera de Tango</span>
+          <span class="cta">Ver ubicación
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </span>
+      </a>
 
-    <div class="separador rv"></div>
+      <a class="card rv" id="link-rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform" target="_blank" rel="noopener">
+        <span class="chip" aria-hidden="true">
+          <svg class="ic ic-check" viewBox="0 0 44 44">
+            <circle class="ring" cx="22" cy="22" r="15"/>
+            <path class="tick" d="M15 22.5l5 5L30 16.5"/>
+          </svg>
+        </span>
+        <span class="body">
+          <span class="h3">Confirmar asistencia</span>
+          <span class="sub">Reserva tu lugar antes del evento.</span>
+          <span class="cta">Confirmar aquí
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </span>
+      </a>
 
-    <div class="bloque rv">
-      <div class="ico" aria-hidden="true">
-        <svg class="ic ic-check" viewBox="0 0 44 44">
-          <circle class="ring" cx="22" cy="22" r="15"/>
-          <path class="tick" d="M15 22.5l5 5L30 16.5"/>
-        </svg>
-      </div>
-      <h3>Confirmar asistencia</h3>
-      <p class="sub">Agradecemos que confirmes tu asistencia para reservar tu lugar.</p>
-      <a class="pill" id="link-rsvp" href="https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform" target="_blank" rel="noopener">Confirmar aquí</a>
-    </div>
-
-    <div class="separador rv"></div>
-
-    <div class="bloque rv">
-      <div class="ico" aria-hidden="true">
-        <svg class="ic ic-gift" viewBox="0 0 44 44">
-          <g class="lid"><rect x="9" y="14" width="26" height="6.5" rx="1.6"/></g>
-          <path d="M11.5 20.5V33a1.6 1.6 0 0 0 1.6 1.6h17.8a1.6 1.6 0 0 0 1.6-1.6V20.5"/>
-          <path d="M22 14v20.6"/>
-          <path class="bow" d="M22 14c-4.5-6-10.5-2.5-4.8 2M22 14c4.5-6 10.5-2.5 4.8 2"/>
-        </svg>
-      </div>
-      <h3>Sugerencia de regalos</h3>
-      <p class="sub">El mejor regalo es tu presencia. Pero si deseas tener un detalle con nosotros, te dejamos nuestra lista.</p>
-      <a class="pill" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">Lista de novios</a>
+      <a class="card rv" href="https://novios.falabella.com/info-evento/evento?codigoEvento=2105408" target="_blank" rel="noopener">
+        <span class="chip" aria-hidden="true">
+          <svg class="ic ic-gift" viewBox="0 0 44 44">
+            <path class="spark" d="M33 10.5v5M30.5 13h5"/>
+            <g class="lid"><rect x="9" y="14" width="26" height="6.5" rx="1.6"/></g>
+            <path d="M11.5 20.5V33a1.6 1.6 0 0 0 1.6 1.6h17.8a1.6 1.6 0 0 0 1.6-1.6V20.5"/>
+            <path d="M22 14v20.6"/>
+            <path class="bow" d="M22 14c-4.5-6-10.5-2.5-4.8 2M22 14c4.5-6 10.5-2.5 4.8 2"/>
+          </svg>
+        </span>
+        <span class="body">
+          <span class="h3">Lista de novios</span>
+          <span class="sub">Tu presencia es nuestro regalo. Si quieres, aquí está la lista.</span>
+          <span class="cta">Ver lista
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </span>
+        </span>
+      </a>
     </div>
 
     <div class="flecha" aria-hidden="true">
@@ -488,18 +508,29 @@
 
   setTimeout(function(){ btn.disabled = false; }, 6000);
 
-  // ---------- Reveal ----------
-  var io = new IntersectionObserver(function(entradas){
-    entradas.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); } });
-  }, { threshold: .15 });
-  document.querySelectorAll('.rv').forEach(function(n){ io.observe(n); });
-
-  // La flecha de la portada desaparece al bajar
+  // ---------- Reveal por posición ----------
+  // Se usa la posición en pantalla (no IntersectionObserver) para que sea
+  // robusto: si el observer fallara, el contenido quedaría invisible.
   var scroll = document.getElementById('scroll');
-  scroll.addEventListener('scroll', function(){
-    var f = document.querySelector('#portada .flecha');
-    if (f) f.style.opacity = scroll.scrollTop > 60 ? '0' : '1';
-  }, { passive: true });
+  var flecha = document.querySelector('#portada .flecha');
+  var rvs = [].slice.call(document.querySelectorAll('.rv'));
+
+  function reveal(){
+    var h = window.innerHeight;
+    for (var i = rvs.length - 1; i >= 0; i--){
+      var r = rvs[i].getBoundingClientRect();
+      if (r.top < h * 0.9 && r.bottom > 0){ rvs[i].classList.add('on'); rvs.splice(i, 1); }
+    }
+  }
+  function onScroll(){
+    reveal();
+    if (flecha) flecha.style.opacity = scroll.scrollTop > 60 ? '0' : '1';
+  }
+  reveal();
+  scroll.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', reveal);
+  // Respaldo: si algo impidiera el reveal por scroll, nada queda oculto.
+  setTimeout(function(){ rvs.slice().forEach(function(n){ var r = n.getBoundingClientRect(); if (r.top < window.innerHeight) n.classList.add('on'); }); }, 1500);
 })();
 </script>
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
