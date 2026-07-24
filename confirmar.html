@@ -24,7 +24,6 @@
     min-height:100dvh;padding:2.2rem 1.2rem 3rem;
     display:flex;justify-content:center;
   }
-  /* textura de papel sutil */
   body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:multiply;opacity:.5;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.13'/%3E%3C/svg%3E")}
   .wrap{width:100%;max-width:27rem}
@@ -47,10 +46,8 @@
   input[type=text],textarea{width:100%;font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:var(--tinta);
     background:#fff;border:1px solid var(--linea);border-radius:.7rem;padding:.62rem .8rem;transition:border-color .2s}
   input[type=text]:focus,textarea:focus{outline:none;border-color:var(--salvia);box-shadow:0 0 0 3px rgba(140,154,118,.15)}
-  textarea{resize:vertical;min-height:3.2rem}
   ::placeholder{color:#b7ae9d}
 
-  /* opciones tipo segmento */
   .seg{display:flex;gap:.5rem;flex-wrap:wrap}
   .seg label{flex:1 1 auto;min-width:4.6rem;cursor:pointer}
   .seg input{position:absolute;opacity:0;width:0;height:0}
@@ -62,6 +59,11 @@
 
   .hide{display:none}
 
+  /* separador del bloque acompañante */
+  .acomp-head{display:flex;align-items:center;justify-content:center;gap:.7rem;margin:1.8rem 0 .2rem;
+    font-family:var(--sans);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--salvia)}
+  .acomp-head::before,.acomp-head::after{content:"";height:1px;flex:1;background:var(--linea)}
+
   .btn{width:100%;margin-top:1.7rem;background:var(--salvia);color:#fff;border:0;border-radius:2rem;
     padding:.95rem;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
     cursor:pointer;transition:background .2s,transform .2s}
@@ -69,7 +71,6 @@
   .btn:disabled{opacity:.55;cursor:default}
   .err{color:#b06a5c;font-family:var(--sans);font-size:.72rem;text-align:center;margin-top:.9rem;min-height:1rem}
 
-  /* pantalla de gracias */
   .done{display:none;text-align:center;background:#fcfaf4;border:1px solid var(--linea);border-radius:1.4rem;
     box-shadow:0 18px 38px -26px rgba(74,69,59,.6);padding:2.6rem 1.5rem;margin-top:1.5rem}
   .done.show{display:block}
@@ -112,13 +113,8 @@
         </div>
       </div>
 
-      <div class="field hide" id="q-acomp">
-        <span class="label">Nombre y apellido del acompañante</span>
-        <input type="text" id="f-acomp" autocomplete="off" placeholder="Nombre completo del acompañante">
-      </div>
-
       <div class="field">
-        <span class="label">Preferencia alimentaria</span>
+        <span class="label">Tu preferencia alimentaria</span>
         <div class="seg" id="seg-pref">
           <label><input type="radio" name="pref" value="Tradicional"><span>Tradicional</span></label>
           <label><input type="radio" name="pref" value="Vegetariano"><span>Vegetariano</span></label>
@@ -134,6 +130,36 @@
         </div>
         <div class="hide" id="q-alergiadet" style="margin-top:.7rem">
           <input type="text" id="f-alergiadet" placeholder="¿Cuál? Cuéntanos para cuidarte">
+        </div>
+      </div>
+
+      <!-- ==== Bloque del acompañante ==== -->
+      <div id="bloque-acomp" class="hide">
+        <div class="acomp-head">Sobre tu acompañante</div>
+
+        <div class="field">
+          <span class="label">Nombre y apellido del acompañante</span>
+          <input type="text" id="f-acomp" autocomplete="off" placeholder="Nombre completo del acompañante">
+        </div>
+
+        <div class="field">
+          <span class="label" id="lbl-pref-ac">Preferencia alimentaria del acompañante</span>
+          <div class="seg" id="seg-pref-ac">
+            <label><input type="radio" name="pref-ac" value="Tradicional"><span>Tradicional</span></label>
+            <label><input type="radio" name="pref-ac" value="Vegetariano"><span>Vegetariano</span></label>
+            <label><input type="radio" name="pref-ac" value="Vegano"><span>Vegano</span></label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label" id="lbl-al-ac">¿Tu acompañante tiene alguna alergia?</span>
+          <div class="seg" id="seg-alergia-ac">
+            <label><input type="radio" name="alergia-ac" value="Sí"><span>Sí</span></label>
+            <label><input type="radio" name="alergia-ac" value="No"><span>No</span></label>
+          </div>
+          <div class="hide" id="q-alergiadet-ac" style="margin-top:.7rem">
+            <input type="text" id="f-alergiadet-ac" placeholder="¿Cuál?">
+          </div>
         </div>
       </div>
     </div>
@@ -153,43 +179,54 @@
 
 <script>
 (function(){
-  /* ==== 1) PEGA AQUÍ la URL del Web App de tu Apps Script ==== */
+  /* ==== PEGA AQUÍ la URL del Web App de tu Apps Script (termina en /exec) ==== */
   var SCRIPT_URL = 'REEMPLAZAR_CON_TU_URL_DEL_APPS_SCRIPT';
 
   var p = new URLSearchParams(location.search);
-  var idParam    = (p.get('id') || '').trim();
-  var nombreP    = (p.get('nombre') || '').trim();
-  var acompP     = (p.get('acomp') || '').trim();
-  var puedeLlevar= p.has('plus');   // el invitado PUEDE llevar acompañante (opcional)
+  var idParam     = (p.get('id') || '').trim();
+  var nombreP     = (p.get('nombre') || '').trim();
+  var acompP      = (p.get('acomp') || '').trim();
+  var puedeLlevar = p.has('plus');
 
   var $ = function(s){ return document.querySelector(s); };
-  var form = $('#form'), detalle = $('#detalle'), err = $('#err'), btn = $('#btn');
+  var form = $('#form'), detalle = $('#detalle'), bloque = $('#bloque-acomp'), err = $('#err'), btn = $('#btn');
 
-  // Datos ocultos / autocompletados
   $('#f-id').value = idParam;
   if (nombreP) { $('#f-nombre').value = nombreP; $('#saludo').innerHTML = 'Hola <b>' + escapeHtml(nombreP) + '</b>, nos encantaría contar contigo'; }
 
+  // Etiquetas del acompañante con su nombre
+  function updateAcompLabels(){
+    var n = $('#f-acomp').value.trim();
+    if (n){
+      $('#lbl-pref-ac').textContent = 'Preferencia alimentaria de ' + n;
+      $('#lbl-al-ac').textContent   = '¿' + n + ' tiene alguna alergia?';
+    } else {
+      $('#lbl-pref-ac').textContent = 'Preferencia alimentaria del acompañante';
+      $('#lbl-al-ac').textContent   = '¿Tu acompañante tiene alguna alergia?';
+    }
+  }
+  $('#f-acomp').addEventListener('input', updateAcompLabels);
+
   // ---- Lógica de acompañante (3 casos) ----
-  var conAcompFijo = null; // cuando el caso ya está determinado por el link
+  var conAcompFijo = null;
   if (acompP) {
-    // Caso A: va con acompañante conocido → oculta P3, autocompleta P4
     conAcompFijo = 'Sí';
-    $('#q-acomp').classList.remove('hide');
     $('#f-acomp').value = acompP;
+    bloque.classList.remove('hide');
+    updateAcompLabels();
   } else if (puedeLlevar) {
-    // Caso C: puede llevar acompañante → muestra P3; P4 según respuesta
     $('#q-conacomp').classList.remove('hide');
     document.querySelectorAll('input[name="conacomp"]').forEach(function(r){
       r.addEventListener('change', function(){
-        $('#q-acomp').classList.toggle('hide', this.value !== 'Sí');
+        bloque.classList.toggle('hide', this.value !== 'Sí');
+        updateAcompLabels();
       });
     });
   } else {
-    // Caso B: sin acompañante → P3 y P4 ocultas
     conAcompFijo = 'No';
   }
 
-  // ---- Asistencia: muestra/oculta el resto ----
+  // ---- Asistencia ----
   document.querySelectorAll('input[name="asiste"]').forEach(function(r){
     r.addEventListener('change', function(){
       var si = this.value === 'Sí';
@@ -198,12 +235,14 @@
     });
   });
 
-  // ---- Alergia: abre caja de texto ----
-  document.querySelectorAll('input[name="alergia"]').forEach(function(r){
-    r.addEventListener('change', function(){
-      $('#q-alergiadet').classList.toggle('hide', this.value !== 'Sí');
+  // ---- Alergias: abren caja de texto ----
+  bindAlergia('alergia', '#q-alergiadet');
+  bindAlergia('alergia-ac', '#q-alergiadet-ac');
+  function bindAlergia(name, box){
+    document.querySelectorAll('input[name="'+name+'"]').forEach(function(r){
+      r.addEventListener('change', function(){ $(box).classList.toggle('hide', this.value !== 'Sí'); });
     });
-  });
+  }
 
   function val(name){ var el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; }
   function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
@@ -212,47 +251,43 @@
     ev.preventDefault();
     err.textContent = '';
     var asiste = val('asiste');
-    if (!asiste) { return fail('Cuéntanos si podrás asistir.'); }
+    if (!asiste) return fail('Cuéntanos si podrás asistir.');
 
     var conAcomp = conAcompFijo || val('conacomp');
-    var payload = {
-      id: idParam,
-      asiste: asiste,
+    var d = {
+      id: idParam, asiste: asiste,
       nombre: $('#f-nombre').value.trim(),
-      conAcomp: '',
-      acompNombre: '',
-      preferencia: '',
-      alergia: '',
-      alergiaDetalle: ''
+      preferencia:'', alergia:'', alergiaDetalle:'',
+      conAcomp:'', acompNombre:'', acompPreferencia:'', acompAlergia:'', acompAlergiaDetalle:''
     };
 
     if (asiste === 'Sí') {
-      if (!payload.nombre) return fail('Escribe tu nombre y apellido.');
+      if (!d.nombre) return fail('Escribe tu nombre y apellido.');
       if (puedeLlevar && !acompP && !conAcomp) return fail('Indica si vas con acompañante.');
-      payload.conAcomp = conAcomp;
+      d.preferencia = val('pref');
+      if (!d.preferencia) return fail('Elige tu preferencia alimentaria.');
+      d.alergia = val('alergia');
+      if (!d.alergia) return fail('Indica si tienes alguna alergia.');
+      if (d.alergia === 'Sí') { d.alergiaDetalle = $('#f-alergiadet').value.trim(); if (!d.alergiaDetalle) return fail('Cuéntanos cuál es tu alergia.'); }
+
+      d.conAcomp = conAcomp;
       if (conAcomp === 'Sí') {
-        payload.acompNombre = $('#f-acomp').value.trim();
-        if (!payload.acompNombre) return fail('Escribe el nombre de tu acompañante.');
-      }
-      payload.preferencia = val('pref');
-      if (!payload.preferencia) return fail('Elige una preferencia alimentaria.');
-      payload.alergia = val('alergia');
-      if (!payload.alergia) return fail('Indica si tienes alguna alergia.');
-      if (payload.alergia === 'Sí') {
-        payload.alergiaDetalle = $('#f-alergiadet').value.trim();
-        if (!payload.alergiaDetalle) return fail('Cuéntanos cuál es la alergia.');
+        d.acompNombre = $('#f-acomp').value.trim();
+        if (!d.acompNombre) return fail('Escribe el nombre de tu acompañante.');
+        d.acompPreferencia = val('pref-ac');
+        if (!d.acompPreferencia) return fail('Elige la preferencia alimentaria del acompañante.');
+        d.acompAlergia = val('alergia-ac');
+        if (!d.acompAlergia) return fail('Indica si tu acompañante tiene alergias.');
+        if (d.acompAlergia === 'Sí') { d.acompAlergiaDetalle = $('#f-alergiadet-ac').value.trim(); if (!d.acompAlergiaDetalle) return fail('Cuéntanos la alergia del acompañante.'); }
       }
     } else {
-      // No asiste: guardamos el nombre para saber quién declinó
-      if (!payload.nombre) payload.nombre = nombreP;
+      if (!d.nombre) d.nombre = nombreP;
     }
 
-    if (SCRIPT_URL.indexOf('REEMPLAZAR') > -1) {
-      return fail('El formulario aún no está conectado. Avísale a los novios.');
-    }
+    if (SCRIPT_URL.indexOf('REEMPLAZAR') > -1) return fail('El formulario aún no está conectado. Avísale a los novios.');
 
     btn.disabled = true; btn.textContent = 'Enviando…';
-    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) })
+    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(d) })
       .then(function(){ done(asiste); })
       .catch(function(){ btn.disabled = false; btn.textContent = 'Reintentar'; fail('No se pudo enviar. Revisa tu conexión e intenta de nuevo.'); });
   });
@@ -260,7 +295,7 @@
   function fail(msg){ err.textContent = msg; }
   function done(asiste){
     form.style.display = 'none';
-    var d = $('#done'); d.classList.add('show');
+    $('#done').classList.add('show');
     if (asiste === 'No'){
       $('#done-title').textContent = '¡Gracias por avisarnos!';
       $('#done-msg').textContent = 'Lamentamos que no puedas acompañarnos. ¡Te mandamos un abrazo!';

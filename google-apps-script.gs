@@ -18,8 +18,9 @@
  */
 
 var SHEET_NAME = 'Respuestas';
-var HEADERS = ['Fecha/hora','ID','Asiste','Nombre invitado','Con acompañante',
-               'Nombre acompañante','Preferencia alimentaria','Alergia','Detalle alergia'];
+var HEADERS = ['Fecha/hora','ID','Asiste',
+               'Nombre invitado','Preferencia invitado','Alergia invitado','Detalle alergia invitado',
+               'Con acompañante','Nombre acompañante','Preferencia acompañante','Alergia acompañante','Detalle alergia acompañante'];
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -36,11 +37,14 @@ function doPost(e) {
       d.id || '',
       d.asiste || '',
       d.nombre || '',
-      d.conAcomp || '',
-      d.acompNombre || '',
       d.preferencia || '',
       d.alergia || '',
-      d.alergiaDetalle || ''
+      d.alergiaDetalle || '',
+      d.conAcomp || '',
+      d.acompNombre || '',
+      d.acompPreferencia || '',
+      d.acompAlergia || '',
+      d.acompAlergiaDetalle || ''
     ];
 
     // Upsert por ID (columna B): si ya existe, actualiza esa fila.
