@@ -313,9 +313,11 @@
   .dcard .txt{font-size:.9rem;color:var(--tinta-suave);line-height:1.4;margin-top:.15rem}
   .dcard .txt strong{color:var(--tinta);font-weight:600}
 
-  /* vestimenta: el corbatín se ajusta */
-  .ic-bowtie .bt{animation:btAdjust 2.8s ease-in-out infinite;transform-origin:22px 22px}
-  @keyframes btAdjust{0%,55%{transform:rotate(0) scale(1)}66%{transform:rotate(-5deg) scale(1.06)}76%{transform:rotate(4deg) scale(1.03)}86%,100%{transform:rotate(0) scale(1)}}
+  /* vestimenta: una pareja (traje y vestido) que baila meciéndose */
+  .ic-dance .dancer-a{animation:danceA 2.4s ease-in-out infinite;transform-origin:15px 30px}
+  .ic-dance .dancer-b{animation:danceB 2.4s ease-in-out infinite;transform-origin:29px 31px}
+  @keyframes danceA{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-3deg)}}
+  @keyframes danceB{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(3deg)}}
   /* sin niños: dos copas que brindan */
   .ic-cheers .glassL{animation:clinkL 2.8s ease-in-out infinite;transform-origin:17px 29px}
   .ic-cheers .glassR{animation:clinkR 2.8s ease-in-out infinite;transform-origin:27px 29px}
@@ -466,11 +468,20 @@
     <div class="dcards">
       <div class="dcard rv">
         <span class="chip" aria-hidden="true">
-          <svg class="ic ic-bowtie" viewBox="0 0 44 44">
-            <g class="bt">
-              <path d="M22 22 12 17v10z"/>
-              <path d="M22 22 32 17v10z"/>
-              <rect x="19.7" y="19.2" width="4.6" height="5.6" rx="1.2"/>
+          <svg class="ic ic-dance" viewBox="0 0 44 44">
+            <g class="dancer-a">
+              <circle cx="15" cy="11" r="2.6"/>
+              <path d="M15 13.6v4.4"/>
+              <path d="M15 18 10.5 30h9z"/>
+              <path d="M15 16 19.6 14.6"/>
+            </g>
+            <g class="dancer-b">
+              <circle cx="29" cy="11" r="2.6"/>
+              <path d="M29 13.6v9.4"/>
+              <path d="M26.9 15 29 13.8 31.1 15"/>
+              <path d="M29 23 26.8 31"/>
+              <path d="M29 23 31.2 31"/>
+              <path d="M29 16 24.4 14.6"/>
             </g>
           </svg>
         </span>
