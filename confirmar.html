@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confirmar asistencia · Patricio &amp; Maite</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papel:#f3eee3; --papel-2:#ebe4d6;
+    --tinta:#4a453b; --tinta-suave:#8b8375;
+    --salvia:#8c9a76; --salvia-med:#a7b291; --salvia-suave:#d3dac5; --salvia-panel:#e9ecdf;
+    --linea:rgba(120,110,92,.30);
+    --sans:'Jost',system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    background:var(--papel);color:var(--tinta);
+    font-family:'Cormorant Garamond',Georgia,serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh;padding:2.2rem 1.2rem 3rem;
+    display:flex;justify-content:center;
+  }
+  /* textura de papel sutil */
+  body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;mix-blend-mode:multiply;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.13'/%3E%3C/svg%3E")}
+  .wrap{width:100%;max-width:27rem}
+
+  .eyebrow{font-family:var(--sans);font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--tinta-suave);text-align:center}
+  .title{font-family:'Parisienne',cursive;font-size:2.8rem;color:var(--tinta);text-align:center;line-height:1;margin:.35rem 0}
+  .title .amp{color:var(--salvia)}
+  .sub{font-family:var(--sans);font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--salvia);text-align:center;margin-top:.5rem}
+  .filete{display:flex;align-items:center;justify-content:center;gap:.7rem;width:9rem;margin:1rem auto 0}
+  .filete::before,.filete::after{content:"";height:1px;flex:1;background:var(--linea)}
+  .filete span{width:5px;height:5px;border-radius:50%;background:var(--salvia-med)}
+
+  form{background:#fcfaf4;border:1px solid var(--linea);border-radius:1.4rem;
+    box-shadow:0 18px 38px -26px rgba(74,69,59,.6);padding:1.5rem 1.3rem 1.7rem;margin-top:1.5rem}
+  .saludo{font-size:1.2rem;text-align:center;color:var(--tinta-suave);font-style:italic}
+  .saludo b{color:var(--tinta);font-style:normal;font-weight:600}
+
+  .field{margin-top:1.35rem}
+  .label{font-family:var(--sans);font-size:.66rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta);display:block;margin-bottom:.55rem}
+  input[type=text],textarea{width:100%;font-family:'Cormorant Garamond',serif;font-size:1.08rem;color:var(--tinta);
+    background:#fff;border:1px solid var(--linea);border-radius:.7rem;padding:.62rem .8rem;transition:border-color .2s}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--salvia);box-shadow:0 0 0 3px rgba(140,154,118,.15)}
+  textarea{resize:vertical;min-height:3.2rem}
+  ::placeholder{color:#b7ae9d}
+
+  /* opciones tipo segmento */
+  .seg{display:flex;gap:.5rem;flex-wrap:wrap}
+  .seg label{flex:1 1 auto;min-width:4.6rem;cursor:pointer}
+  .seg input{position:absolute;opacity:0;width:0;height:0}
+  .seg span{display:block;text-align:center;font-family:var(--sans);font-size:.72rem;letter-spacing:.03em;
+    padding:.62rem .5rem;border:1px solid var(--salvia-med);border-radius:2rem;color:#5f6a49;transition:all .2s;background:#fff}
+  .seg label:hover span{border-color:var(--salvia)}
+  .seg input:checked + span{background:var(--salvia);color:#fff;border-color:var(--salvia)}
+  .seg input:focus-visible + span{box-shadow:0 0 0 3px rgba(140,154,118,.3)}
+
+  .hide{display:none}
+
+  .btn{width:100%;margin-top:1.7rem;background:var(--salvia);color:#fff;border:0;border-radius:2rem;
+    padding:.95rem;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+    cursor:pointer;transition:background .2s,transform .2s}
+  .btn:hover:not(:disabled){background:#7c8a67;transform:translateY(-1px)}
+  .btn:disabled{opacity:.55;cursor:default}
+  .err{color:#b06a5c;font-family:var(--sans);font-size:.72rem;text-align:center;margin-top:.9rem;min-height:1rem}
+
+  /* pantalla de gracias */
+  .done{display:none;text-align:center;background:#fcfaf4;border:1px solid var(--linea);border-radius:1.4rem;
+    box-shadow:0 18px 38px -26px rgba(74,69,59,.6);padding:2.6rem 1.5rem;margin-top:1.5rem}
+  .done.show{display:block}
+  .done .heart{color:var(--salvia)}
+  .done h2{font-family:'Parisienne',cursive;font-size:2.3rem;color:var(--salvia);margin:.6rem 0 .3rem;font-weight:400}
+  .done p{font-size:1.05rem;line-height:1.6;color:var(--tinta-suave);max-width:20rem;margin:0 auto}
+  .pie{text-align:center;font-family:var(--sans);font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tinta-suave);opacity:.75;margin-top:1.6rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Nuestra boda · 10 · 10 · 2026</p>
+  <h1 class="title">Patricio<span class="amp">&amp;</span>Maite</h1>
+  <p class="sub">Confirmación de asistencia</p>
+  <div class="filete"><span></span></div>
+
+  <form id="form" novalidate>
+    <p class="saludo" id="saludo">Nos encantaría contar contigo</p>
+    <input type="hidden" id="f-id">
+
+    <div class="field">
+      <span class="label">¿Nos acompañarás?</span>
+      <div class="seg" id="seg-asiste">
+        <label><input type="radio" name="asiste" value="Sí"><span>Sí, asistiré</span></label>
+        <label><input type="radio" name="asiste" value="No"><span>No podré ir</span></label>
+      </div>
+    </div>
+
+    <div id="detalle" class="hide">
+      <div class="field">
+        <span class="label">Nombre y apellido</span>
+        <input type="text" id="f-nombre" autocomplete="name" placeholder="Tu nombre completo">
+      </div>
+
+      <div class="field hide" id="q-conacomp">
+        <span class="label">¿Asistirás con acompañante?</span>
+        <div class="seg" id="seg-conacomp">
+          <label><input type="radio" name="conacomp" value="Sí"><span>Sí</span></label>
+          <label><input type="radio" name="conacomp" value="No"><span>No</span></label>
+        </div>
+      </div>
+
+      <div class="field hide" id="q-acomp">
+        <span class="label">Nombre y apellido del acompañante</span>
+        <input type="text" id="f-acomp" autocomplete="off" placeholder="Nombre completo del acompañante">
+      </div>
+
+      <div class="field">
+        <span class="label">Preferencia alimentaria</span>
+        <div class="seg" id="seg-pref">
+          <label><input type="radio" name="pref" value="Tradicional"><span>Tradicional</span></label>
+          <label><input type="radio" name="pref" value="Vegetariano"><span>Vegetariano</span></label>
+          <label><input type="radio" name="pref" value="Vegano"><span>Vegano</span></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="label">¿Tienes alguna alergia alimentaria?</span>
+        <div class="seg" id="seg-alergia">
+          <label><input type="radio" name="alergia" value="Sí"><span>Sí</span></label>
+          <label><input type="radio" name="alergia" value="No"><span>No</span></label>
+        </div>
+        <div class="hide" id="q-alergiadet" style="margin-top:.7rem">
+          <input type="text" id="f-alergiadet" placeholder="¿Cuál? Cuéntanos para cuidarte">
+        </div>
+      </div>
+    </div>
+
+    <p class="err" id="err"></p>
+    <button type="submit" class="btn" id="btn">Enviar confirmación</button>
+  </form>
+
+  <div class="done" id="done">
+    <svg class="heart" width="40" height="40" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21C5.5 16.2 3 12.5 3 9.2 3 6.4 5.2 4.5 7.7 4.5c1.6 0 3.2.9 4.3 2.4C13.1 5.4 14.7 4.5 16.3 4.5 18.8 4.5 21 6.4 21 9.2c0 3.3-2.5 7-9 11.8z"/></svg>
+    <h2 id="done-title">¡Gracias!</h2>
+    <p id="done-msg">Recibimos tu confirmación. Nos vemos el 10 de octubre.</p>
+  </div>
+
+  <p class="pie">San Miguel de Tango · 17:30 hrs</p>
+</div>
+
+<script>
+(function(){
+  /* ==== 1) PEGA AQUÍ la URL del Web App de tu Apps Script ==== */
+  var SCRIPT_URL = 'REEMPLAZAR_CON_TU_URL_DEL_APPS_SCRIPT';
+
+  var p = new URLSearchParams(location.search);
+  var idParam    = (p.get('id') || '').trim();
+  var nombreP    = (p.get('nombre') || '').trim();
+  var acompP     = (p.get('acomp') || '').trim();
+  var puedeLlevar= p.has('plus');   // el invitado PUEDE llevar acompañante (opcional)
+
+  var $ = function(s){ return document.querySelector(s); };
+  var form = $('#form'), detalle = $('#detalle'), err = $('#err'), btn = $('#btn');
+
+  // Datos ocultos / autocompletados
+  $('#f-id').value = idParam;
+  if (nombreP) { $('#f-nombre').value = nombreP; $('#saludo').innerHTML = 'Hola <b>' + escapeHtml(nombreP) + '</b>, nos encantaría contar contigo'; }
+
+  // ---- Lógica de acompañante (3 casos) ----
+  var conAcompFijo = null; // cuando el caso ya está determinado por el link
+  if (acompP) {
+    // Caso A: va con acompañante conocido → oculta P3, autocompleta P4
+    conAcompFijo = 'Sí';
+    $('#q-acomp').classList.remove('hide');
+    $('#f-acomp').value = acompP;
+  } else if (puedeLlevar) {
+    // Caso C: puede llevar acompañante → muestra P3; P4 según respuesta
+    $('#q-conacomp').classList.remove('hide');
+    document.querySelectorAll('input[name="conacomp"]').forEach(function(r){
+      r.addEventListener('change', function(){
+        $('#q-acomp').classList.toggle('hide', this.value !== 'Sí');
+      });
+    });
+  } else {
+    // Caso B: sin acompañante → P3 y P4 ocultas
+    conAcompFijo = 'No';
+  }
+
+  // ---- Asistencia: muestra/oculta el resto ----
+  document.querySelectorAll('input[name="asiste"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      var si = this.value === 'Sí';
+      detalle.classList.toggle('hide', !si);
+      btn.textContent = si ? 'Enviar confirmación' : 'Enviar respuesta';
+    });
+  });
+
+  // ---- Alergia: abre caja de texto ----
+  document.querySelectorAll('input[name="alergia"]').forEach(function(r){
+    r.addEventListener('change', function(){
+      $('#q-alergiadet').classList.toggle('hide', this.value !== 'Sí');
+    });
+  });
+
+  function val(name){ var el = document.querySelector('input[name="'+name+'"]:checked'); return el ? el.value : ''; }
+  function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    err.textContent = '';
+    var asiste = val('asiste');
+    if (!asiste) { return fail('Cuéntanos si podrás asistir.'); }
+
+    var conAcomp = conAcompFijo || val('conacomp');
+    var payload = {
+      id: idParam,
+      asiste: asiste,
+      nombre: $('#f-nombre').value.trim(),
+      conAcomp: '',
+      acompNombre: '',
+      preferencia: '',
+      alergia: '',
+      alergiaDetalle: ''
+    };
+
+    if (asiste === 'Sí') {
+      if (!payload.nombre) return fail('Escribe tu nombre y apellido.');
+      if (puedeLlevar && !acompP && !conAcomp) return fail('Indica si vas con acompañante.');
+      payload.conAcomp = conAcomp;
+      if (conAcomp === 'Sí') {
+        payload.acompNombre = $('#f-acomp').value.trim();
+        if (!payload.acompNombre) return fail('Escribe el nombre de tu acompañante.');
+      }
+      payload.preferencia = val('pref');
+      if (!payload.preferencia) return fail('Elige una preferencia alimentaria.');
+      payload.alergia = val('alergia');
+      if (!payload.alergia) return fail('Indica si tienes alguna alergia.');
+      if (payload.alergia === 'Sí') {
+        payload.alergiaDetalle = $('#f-alergiadet').value.trim();
+        if (!payload.alergiaDetalle) return fail('Cuéntanos cuál es la alergia.');
+      }
+    } else {
+      // No asiste: guardamos el nombre para saber quién declinó
+      if (!payload.nombre) payload.nombre = nombreP;
+    }
+
+    if (SCRIPT_URL.indexOf('REEMPLAZAR') > -1) {
+      return fail('El formulario aún no está conectado. Avísale a los novios.');
+    }
+
+    btn.disabled = true; btn.textContent = 'Enviando…';
+    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) })
+      .then(function(){ done(asiste); })
+      .catch(function(){ btn.disabled = false; btn.textContent = 'Reintentar'; fail('No se pudo enviar. Revisa tu conexión e intenta de nuevo.'); });
+  });
+
+  function fail(msg){ err.textContent = msg; }
+  function done(asiste){
+    form.style.display = 'none';
+    var d = $('#done'); d.classList.add('show');
+    if (asiste === 'No'){
+      $('#done-title').textContent = '¡Gracias por avisarnos!';
+      $('#done-msg').textContent = 'Lamentamos que no puedas acompañarnos. ¡Te mandamos un abrazo!';
+    }
+  }
+})();
+</script>
+</body>
+</html>

@@ -551,13 +551,12 @@
   // Nombre del invitado (sanitizado vía textContent)
   document.getElementById('invitado').textContent = nombre ? nombre : 'Familia y amigos';
 
-  // Precarga del formulario con el nombre del invitado
+  // El botón de confirmar lleva a nuestro formulario, reenviando los
+  // parámetros del invitado (id, nombre, acomp, plus).
   var rsvp = document.getElementById('link-rsvp');
-  var base = 'https://docs.google.com/forms/d/e/1FAIpQLSeMooThTCkP7ORYWdO4rX9WjTp8301bHB36WyJq_VDOjQ3_1Q/viewform';
-  if (nombre) {
-    rsvp.href = base + '?usp=pp_url&entry.1216997967=' + encodeURIComponent(nombre);
-    document.title = nombre + ' · Patricio & Maite';
-  }
+  rsvp.href = 'confirmar.html' + location.search;
+  rsvp.removeAttribute('target');
+  if (nombre) document.title = nombre + ' · Patricio & Maite';
 
   // ---------- Contador ----------
   // 10 de octubre de 2026, 17:30 hrs — Chile continental (UTC-3)
