@@ -316,10 +316,24 @@
   /* vestimenta: una pareja (traje y vestido) que baila meciéndose.
      Siluetas rellenas para que se lea el vestido (falda) y el traje (piernas). */
   .ic-dance{fill:var(--salvia);stroke:none}
-  .ic-dance .dancer-a{animation:danceA 2.2s ease-in-out infinite;transform-origin:15px 30px}
-  .ic-dance .dancer-b{animation:danceB 2.2s ease-in-out infinite;transform-origin:29px 31px}
-  @keyframes danceA{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-4deg)}}
-  @keyframes danceB{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(4deg)}}
+  /* Bailan girando: orbitan uno alrededor del otro (uno por arriba, el otro por
+     abajo) e intercambian de lado, con un pequeño balanceo. */
+  .ic-dance .dancer-a{animation:swapA 2.8s ease-in-out infinite}
+  .ic-dance .dancer-b{animation:swapB 2.8s ease-in-out infinite}
+  @keyframes swapA{
+    0%{transform:translate(0,0) rotate(0)}
+    25%{transform:translate(7px,-6px) rotate(10deg)}
+    50%{transform:translate(14px,0) rotate(0)}
+    75%{transform:translate(7px,6px) rotate(-10deg)}
+    100%{transform:translate(0,0) rotate(0)}
+  }
+  @keyframes swapB{
+    0%{transform:translate(0,0) rotate(0)}
+    25%{transform:translate(-7px,6px) rotate(-10deg)}
+    50%{transform:translate(-14px,0) rotate(0)}
+    75%{transform:translate(-7px,-6px) rotate(10deg)}
+    100%{transform:translate(0,0) rotate(0)}
+  }
   /* sin niños: dos copas que brindan */
   .ic-cheers .glassL{animation:clinkL 2.8s ease-in-out infinite;transform-origin:17px 29px}
   .ic-cheers .glassR{animation:clinkR 2.8s ease-in-out infinite;transform-origin:27px 29px}
@@ -475,14 +489,12 @@
               <circle cx="15" cy="10" r="2.7"/>
               <path d="M12.8 14.6h4.4l-.4 5h-3.6z"/>
               <path d="M13.1 19.6 9.2 30.6h11.6l-3.9-11z"/>
-              <path d="M16.3 15.4 20.6 12.8l.7 1-4.3 2.7z"/>
             </g>
             <g class="dancer-b"><!-- traje -->
               <circle cx="29" cy="10" r="2.7"/>
               <path d="M26.5 14.6h5l-.7 8h-3.6z"/>
               <path d="M27.3 22.6 26.9 31h1.5l.4-8.4z"/>
               <path d="M29.4 22.6 29.8 31h1.5l-.4-8.4z"/>
-              <path d="M27.7 15.4 23.4 12.8l-.7 1 4.3 2.7z"/>
               <path d="M28.1 13.5 29 14.3l-.9.8-1-.5zM29.9 13.5 29 14.3l.9.8 1-.5z"/>
             </g>
           </svg>
