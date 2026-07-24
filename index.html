@@ -221,7 +221,7 @@
     padding:1.1rem 1.3rem;text-decoration:none;color:inherit;
     transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;
   }
-  .card:hover{transform:translateY(-3px);box-shadow:0 20px 36px -18px rgba(74,69,59,.72);border-color:var(--salvia-med)}
+  @media (hover:hover){.card:hover{transform:translateY(-3px);box-shadow:0 20px 36px -18px rgba(74,69,59,.72);border-color:var(--salvia-med)}}
   .card .chip{
     flex:0 0 auto;width:3.7rem;height:3.7rem;border-radius:1.1rem;
     background:var(--salvia-panel);display:grid;place-items:center;
@@ -236,8 +236,10 @@
     box-shadow:0 8px 16px -8px rgba(140,154,118,.95);
     transition:background .3s ease,transform .3s ease,box-shadow .3s ease}
   .card .cta svg{transition:transform .3s ease}
-  .card:hover .cta{background:#7c8a67;transform:translateY(-1px);box-shadow:0 11px 20px -8px rgba(124,138,103,1)}
-  .card:hover .cta svg{transform:translateX(3px)}
+  @media (hover:hover){
+    .card:hover .cta{background:#7c8a67;transform:translateY(-1px);box-shadow:0 11px 20px -8px rgba(124,138,103,1)}
+    .card:hover .cta svg{transform:translateX(3px)}
+  }
 
   /* Iconos animados (línea, tono salvia) — movimiento sutil en bucle. */
   .ic{width:40px;height:40px;fill:none;stroke:var(--salvia);stroke-width:1.7;
