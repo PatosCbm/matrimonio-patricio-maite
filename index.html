@@ -547,9 +547,11 @@
 (function(){
   var params = new URLSearchParams(location.search);
   var nombre = (params.get('nombre') || '').trim();
+  var acomp  = (params.get('acomp') || '').trim();
 
-  // Nombre del invitado (sanitizado vía textContent)
-  document.getElementById('invitado').textContent = nombre ? nombre : 'Familia y amigos';
+  // Saludo: si hay acompañante conocido, muestra ambos nombres.
+  var saludo = nombre ? (acomp ? nombre + ' y ' + acomp : nombre) : 'Familia y amigos';
+  document.getElementById('invitado').textContent = saludo;
 
   // El botón de confirmar lleva a nuestro formulario, reenviando los
   // parámetros del invitado (id, nombre, acomp, plus).
